@@ -771,16 +771,18 @@ h2 {
 }
 
 .feedback {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  padding: 16px;
+  margin: 16px 0 24px;
+  padding: 14px 16px;
+  border-radius: var(--radius);
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
-  animation: up 0.2s;
+  animation: fade-in 0.2s;
+}
+.feedback .btn { width: 100%; }
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
 }
 
 .feedback.ok {
@@ -796,7 +798,6 @@ h2 {
 .feedback-text {
   display: flex;
   flex-direction: column;
-  max-width: 400px;
 }
 
 .feedback-text span {

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Exercise, Item } from '../types';
 import { Build, Card, Choose, Dialogue, DrillEx, TypeAnswer } from './Exercises';
 
@@ -37,6 +37,11 @@ export default function Player({ title, exercises, onExit, onFinish }: Props) {
   const firstTry = useRef<Map<string, { item: Item | null; ok: boolean }>>(new Map());
   const attempts = useRef<Set<string>>(new Set());
   const gradedTotal = exercises.filter((e) => e.kind !== 'card').length;
+
+  const fbRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (res) fbRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }, [res]);
 
   const ex = queue[idx];
   const progress = Math.min(1, idx / queue.length);
@@ -133,7 +138,7 @@ export default function Player({ title, exercises, onExit, onFinish }: Props) {
       </div>
 
       {res && (
-        <div className={`feedback ${res.ok ? 'ok' : 'bad'}`}>
+        <div ref={fbRef} className={`feedback ${res.ok ? 'ok' : 'bad'}`}>
           <div className="feedback-text">
             <b>{res.ok ? 'Верно! 🎯' : 'Не совсем'}</b>
             {!res.ok && <span>Правильно: {res.solution}</span>}

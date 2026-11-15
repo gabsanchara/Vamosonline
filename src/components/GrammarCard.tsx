@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { Grammar } from '../types';
 
 // Ячейка таблицы: части через «·», у части может быть префикс m:/f:/b:
@@ -24,19 +25,40 @@ export default function GrammarCard({
   g,
   onStart,
   onBack,
+  onRead,
   label = 'Перейти к заданиям',
 }: {
   g: Grammar;
   onStart?: () => void;
   onBack: () => void;
+  onRead?: () => void;
   label?: string;
 }) {
+  // Отмечаем разбор прочитанным, когда страницу долистали до конца
+  const endRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = endRef.current;
+    if (!el || !onRead) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      onRead();
+      return;
+    }
+    const io = new IntersectionObserver((es) => {
+      if (es.some((e) => e.isIntersecting)) {
+        onRead();
+        io.disconnect();
+      }
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [g.day, onRead]);
+
   return (
     <div className="screen">
       <button className="back" onClick={onBack}>
         ← Назад
       </button>
-      <div className="day-chip">День {g.day} · Разбор</div>
+      <div className="day-chip">Разбор</div>
       <h1>
         {g.emoji} {g.title}
       </h1>
@@ -96,6 +118,8 @@ export default function GrammarCard({
           </div>
         </>
       )}
+
+      <div ref={endRef} />
 
       {onStart && (
         <button className="btn primary wide" onClick={onStart}>

@@ -72,4 +72,5 @@ export interface Progress {
   completed: Record<string, { stars: number }>;
   srs: Record<string, SrsCard>;
   log: Record<string, number>; // date -> xp
+  grammarRead?: Record<number, boolean>; // разборы, прочитанные до конца
 }

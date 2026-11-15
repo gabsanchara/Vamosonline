@@ -92,6 +92,10 @@ export function useProgress() {
     });
   }, []);
 
+  const markGrammar = useCallback((day: number) => {
+    setP((prev) => (prev.grammarRead?.[day] ? prev : { ...prev, grammarRead: { ...prev.grammarRead, [day]: true } }));
+  }, []);
+
   const reset = useCallback(() => setP({ ...empty }), []);
 
   const dueItems = Object.values(p.srs)
@@ -101,5 +105,5 @@ export function useProgress() {
   const todayXp = p.log[dayKey()] ?? 0;
   const streakAlive = p.lastDay === dayKey() || p.lastDay === yesterdayKey();
 
-  return { p, finish, reset, dueItems, todayXp, streak: streakAlive ? p.streak : 0 };
+  return { p, finish, markGrammar, reset, dueItems, todayXp, streak: streakAlive ? p.streak : 0 };
 }

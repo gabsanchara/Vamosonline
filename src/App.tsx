@@ -17,7 +17,7 @@ type View =
   | { name: 'play'; lessonId?: string; title: string; exercises: Exercise[] };
 
 export default function App() {
-  const { p, finish, reset, dueItems, todayXp, streak } = useProgress();
+  const { p, finish, markGrammar, reset, dueItems, todayXp, streak } = useProgress();
   const [view, setView] = useState<View>({ name: 'home' });
 
   const available = useMemo(() => COURSE.filter((l) => l.items.length > 0), []);
@@ -52,6 +52,7 @@ export default function App() {
     return (
       <GrammarCard
         g={GRAMMAR[l.day]}
+        onRead={() => markGrammar(l.day)}
         onBack={() => setView(view.thenPlay ? { name: 'intro', lesson: l } : { name: 'grammarList' })}
         onStart={view.thenPlay ? () => startLesson(l) : undefined}
       />
@@ -62,29 +63,32 @@ export default function App() {
     const days = Object.keys(GRAMMAR)
       .map(Number)
       .sort((a, b) => a - b);
+    const readCount = days.filter((d) => p.grammarRead?.[d]).length;
     return (
       <div className="screen">
         <button className="back" onClick={() => setView({ name: 'home' })}>
           ← Назад
         </button>
         <h1>Грамматика</h1>
-        <p className="muted">Разборы правил с запоминалками. Откроются по мере прохождения уроков.</p>
+        <p className="muted">
+          Все разборы открыты всегда. Дочитали до конца — тема отмечается как пройденная. Прочитано: {readCount} из{' '}
+          {days.length}.
+        </p>
         <div className="path">
           {days.map((d) => {
             const l = COURSE.find((x) => x.day === d)!;
-            const open = !!p.completed[l.id] || d === 1 || !!p.completed[COURSE[d - 2]?.id];
+            const read = !!p.grammarRead?.[d];
             return (
               <button
                 key={d}
-                className={`lesson ${open ? '' : 'locked'}`}
-                disabled={!open}
+                className={`lesson ${read ? 'done' : ''}`}
                 onClick={() => setView({ name: 'grammar', lesson: l, thenPlay: false })}
               >
-                <span className="lesson-emoji">{open ? GRAMMAR[d].emoji : '🔒'}</span>
+                <span className="lesson-emoji">{GRAMMAR[d].emoji}</span>
                 <span className="lesson-body">
-                  <span className="lesson-day">День {d}</span>
                   <span className="lesson-title">{GRAMMAR[d].title}</span>
                 </span>
+                <span className="lesson-stars">{read ? '✓ Пройдено' : ''}</span>
               </button>
             );
           })}
@@ -208,7 +212,10 @@ export default function App() {
       <section className="review">
         <div>
           <b>🧠 Грамматика</b>
-          <div className="muted">Правила и запоминалки: артикли, ser / estar, глаголы</div>
+          <div className="muted">
+            Правила и запоминалки · прочитано{' '}
+            {Object.keys(GRAMMAR).filter((d) => p.grammarRead?.[Number(d)]).length} из {Object.keys(GRAMMAR).length}
+          </div>
         </div>
         <button className="btn" onClick={() => setView({ name: 'grammarList' })}>
           Открыть
