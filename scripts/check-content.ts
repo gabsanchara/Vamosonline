@@ -42,7 +42,7 @@ for (const l of COURSE) {
     for (const t of tokensOf(es)) used.add(t);
     for (const p of tokenize(es)) {
       if (!p.known) problems.push(`${l.id}: нет перевода слова «${p.key}» в «${plainText(es)}»`);
-      else if (p.day > l.day) problems.push(`${l.id}: слово «${p.key}» изучается только в день ${p.day} («${plainText(es)}»)`);
+      // Слова, которые изучаются позже, разрешены: над ними стоит перевод, выделяются только слова этого урока.
     }
   }
   for (const it of l.items)
