@@ -66,9 +66,6 @@ export function buildLessonExercises(lesson: Lesson, pool: Item[]): Exercise[] {
   shuffle(items)
     .slice(0, 4)
     .forEach((it) => ex.push(makeChoose(it, 'listen', pool, items)));
-  shuffle(items.filter(isPhrase))
-    .slice(0, 4)
-    .forEach((it) => ex.push({ kind: 'build', item: it, tiles: shuffle(it.es.trim().split(/\s+/)) }));
   shuffle(items)
     .slice(0, 4)
     .forEach((it) => ex.push({ kind: 'type', item: it }));

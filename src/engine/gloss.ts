@@ -12,7 +12,7 @@ export function normWord(w: string): string {
   return w
     .toLowerCase()
     .replace(/^[¿¡«"“(]+/, '')
-    .replace(/[?!.,;:»"”)]+$/, '');
+    .replace(/[?!.,;:»"”)—–-]+$/, '');
 }
 
 export function tokensOf(text: string): string[] {

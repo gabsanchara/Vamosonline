@@ -1,5 +1,15 @@
 // Перевод для подсказок над словами: слова уроков 31–40.
 export const GLOSSARY_B: Record<string, string> = {
+  señora: 'госпожа',
+  pablo: 'Пабло',
+  lucía: 'Лусия',
+  yo: 'я',
+  estudiantes: 'студенты',
+  fiesta: 'вечеринка',
+  bueno: 'хороший',
+  fuimos: 'мы ходили',
+  ir: 'идти',
+  película: 'фильм',
   // Устойчивые сочетания
   'de acuerdo': 'согласен',
   'tengo que': 'мне надо',
