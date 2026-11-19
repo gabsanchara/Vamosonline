@@ -3,6 +3,7 @@ import { items, turn } from './helpers.ts';
 import { week2 } from './lessons-w2.ts';
 import { week3 } from './lessons-w3.ts';
 import { week4 } from './lessons-w4.ts';
+import { week5 } from './lessons-w5.ts';
 
 const full: Lesson[] = [
   {
@@ -114,7 +115,7 @@ const full: Lesson[] = [
     goal: 'Считать до десяти и называть свой возраст',
     tip: {
       title: 'Возраст — «иметь», а не «быть»',
-      text: 'По-испански не «мне двадцать лет», а «tengo veinte años» — буквально «я имею двадцать лет». Глагол tener мы подробно разберём на 8-й день.',
+      text: 'По-испански не «мне двадцать лет», а «tengo veinte años» — буквально «я имею двадцать лет». Глагол tener мы подробно разберём в уроке 8.',
     },
     items: items('d04', [
       ['cero', '0'],
@@ -184,7 +185,7 @@ const upcoming: [string, string][] = [
   ['Цвета и описание', '🎨'],
   ['Дом и комнаты', '🏠'],
   ['Еда и ресторан', '🍽️'],
-  ['Закрепление недели 2', '🏆'],
+  ['Закрепление: уроки 1–13', '🏆'],
   ['Глаголы на -ar', '🏃'],
   ['Глаголы на -er / -ir', '📖'],
   ['Время и часы', '🕒'],
@@ -200,7 +201,7 @@ const upcoming: [string, string][] = [
   ['Прошлое время (pretérito)', '⏪'],
   ['Планы: ir a + глагол', '🗓️'],
   ['Отель и путешествия', '🧳'],
-  ['Финал: большой диалог', '🎓'],
+  ['Большой диалог: знакомство', '💬'],
 ];
 
 const stubs: Lesson[] = upcoming.map(([title, emoji], i) => ({
@@ -215,6 +216,6 @@ const stubs: Lesson[] = upcoming.map(([title, emoji], i) => ({
 const written = new Map<string, Lesson>([...week2, ...week3, ...week4].map((l) => [l.id, l]));
 
 // Написанный урок заменяет заглушку с тем же id; недописанные дни остаются «Скоро».
-export const COURSE: Lesson[] = [...full, ...stubs.map((s) => written.get(s.id) ?? s)];
+export const COURSE: Lesson[] = [...full, ...stubs.map((s) => written.get(s.id) ?? s), ...week5];
 
 export const ALL_ITEMS: Item[] = COURSE.flatMap((l) => l.items);

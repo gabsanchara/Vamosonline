@@ -1,5 +1,6 @@
 import type { Grammar } from '../types.ts';
 import { GRAMMAR_B } from './grammar-b.ts';
+import { GRAMMAR_C } from './grammar-c.ts';
 
 // Грамматика к урокам 1–14. Ассоциации (мнемоники) — на русском, для запоминания.
 export const GRAMMAR: Record<number, Grammar> = {
@@ -1026,7 +1027,7 @@ const PHRASES: Record<number, [string, string][]> = {
   14: [['Ella es de Barcelona.', 'Она из Барселоны.'], ['Ahora ella está en el café.', 'Сейчас она в кафе.'], ['Yo tengo veinte años.', 'Мне двадцать лет.'], ['La ciudad es grande.', 'Город большой.'], ['¿Hay un banco por aquí?', 'Здесь есть банк?'], ['Nosotros queremos un café.', 'Мы хотим кофе.'], ['Tengo mucho frío.', 'Мне очень холодно.'], ['Unas casas rojas', 'Красные дома'], ['Mi amigo es simpático.', 'Мой друг милый.'], ['Hoy mi amigo está muy contento.', 'Сегодня мой друг очень доволен.']],
 };
 
-Object.assign(GRAMMAR, GRAMMAR_B);
+Object.assign(GRAMMAR, GRAMMAR_B, GRAMMAR_C);
 
 for (const [day, list] of Object.entries(PHRASES)) {
   const g = GRAMMAR[Number(day)];

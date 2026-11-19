@@ -43,7 +43,7 @@ export default function App() {
     setView({
       name: 'play',
       lessonId: l.id,
-      title: `День ${l.day}`,
+      title: `Урок ${l.day}`,
       exercises: buildLessonExercises(l, ALL_ITEMS),
     });
 
@@ -110,13 +110,13 @@ export default function App() {
         </button>
         <div className="intro">
           <div className="intro-emoji">{l.emoji}</div>
-          <div className="day-chip">День {l.day}</div>
+          <div className="day-chip">Урок {l.day}</div>
           <h1>{l.title}</h1>
           <p className="muted">{l.goal}</p>
           {GRAMMAR[l.day] && (
             <div className="tip">
               <b>
-                {GRAMMAR[l.day].emoji} Грамматика дня: {GRAMMAR[l.day].title}
+                {GRAMMAR[l.day].emoji} Грамматика урока: {GRAMMAR[l.day].title}
               </b>
               <p>Сначала короткий разбор с запоминалками, затем слова и тренажёры.</p>
             </div>
@@ -146,7 +146,7 @@ export default function App() {
           </button>
           {p.completed[l.id] && hasReading(l.day) && (
             <button className="btn wide" onClick={() => setView({ name: 'reading', lesson: l })}>
-              Читать предложения дня
+              Читать предложения урока
             </button>
           )}
         </div>
@@ -160,7 +160,7 @@ export default function App() {
     <div className="screen home">
       <header className="top">
         <div className="logo">
-          ¡Vamos!<small>испанский за 30 дней</small>
+          ¡Vamos!<small>изучение испанского языка</small>
         </div>
         <div className="pills">
           <span className={`pill ${streak ? 'hot' : ''}`} title="Дней подряд">
@@ -238,7 +238,7 @@ export default function App() {
             >
               <span className="lesson-emoji">{unlocked ? l.emoji : '🔒'}</span>
               <span className="lesson-body">
-                <span className="lesson-day">День {l.day}</span>
+                <span className="lesson-day">Урок {l.day}</span>
                 <span className="lesson-title">{l.title}</span>
                 {hasContent ? (
                   <span className="lesson-goal">{l.goal}</span>

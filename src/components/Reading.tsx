@@ -25,9 +25,9 @@ export default function Reading({ lesson, onDone }: { lesson: Lesson; onDone: ()
       <button className="back" onClick={onDone}>
         ← К урокам
       </button>
-      <h1>Читаем: день {lesson.day}</h1>
+      <h1>Читаем: урок {lesson.day}</h1>
       <div className="read-intro">
-        Слова, которые вы выучили сегодня, <span className="mark">выделены</span>. Над остальными стоит перевод. Нажмите 🔊,
+        Слова, которые вы выучили в этом уроке, <span className="mark">выделены</span>. Над остальными стоит перевод. Нажмите 🔊,
         чтобы послушать предложение.
         <div>
           <button className="hint-toggle" onClick={() => setHide((h) => !h)}>

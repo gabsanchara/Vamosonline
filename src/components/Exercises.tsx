@@ -9,6 +9,46 @@ export interface ExProps<T extends Exercise = Exercise> {
   onAnswer: (ok: boolean, solution: string, why?: string) => void;
 }
 
+// «Скажите вслух»: ученик произносит фразу сам, потом сверяет с озвучкой и честно оценивает себя.
+export function SayEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'say' }>>) {
+  const [shown, setShown] = useState(false);
+  return (
+    <div className="ex">
+      <div className="ex-label">Скажите вслух по-испански</div>
+      <div className="prompt">
+        <span className="prompt-text">{ex.item.ru}</span>
+      </div>
+      <p className="say-hint">Произнесите фразу вслух, потом проверьте себя.</p>
+      {!shown ? (
+        <button
+          className="btn primary wide"
+          onClick={() => {
+            setShown(true);
+            speak(ex.item.es);
+          }}
+        >
+          Показать ответ
+        </button>
+      ) : (
+        <>
+          <div className="drill-full">
+            <span className="drill-es">{ex.item.es}</span>
+            <Speaker text={ex.item.es} />
+          </div>
+          <div className="say-actions">
+            <button className="btn ok" disabled={locked} onClick={() => onAnswer(true, ex.item.es)}>
+              Получилось
+            </button>
+            <button className="btn" disabled={locked} onClick={() => onAnswer(false, ex.item.es)}>
+              Повторю ещё
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 export function DrillEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'drill' }>>) {
   const [picked, setPicked] = useState<string | null>(null);
   const [opts] = useState(() => [...ex.drill.options].sort(() => Math.random() - 0.5));

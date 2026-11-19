@@ -1,3 +1,4 @@
+import { READINGS_B } from './readings-b.ts';
 // Предложения для чтения в конце каждого дня.
 // Правила: в день N используем только слова, изученные до дня N включительно,
 // а каждое слово из списка фраз этого дня обязательно встречается в предложениях.
@@ -336,3 +337,5 @@ export const READINGS: Record<number, [string, string][]> = {
     ['¡Buen viaje! ¡Hasta pronto!', 'Счастливого пути! До скорой встречи!'],
   ],
 };
+
+Object.assign(READINGS, READINGS_B);

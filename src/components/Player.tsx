@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Exercise, Item } from '../types';
-import { Build, Card, Choose, Dialogue, DrillEx, TypeAnswer } from './Exercises';
+import { Build, Card, Choose, Dialogue, DrillEx, SayEx, TypeAnswer } from './Exercises';
 
 export interface PlayerResult {
   xp: number;
@@ -135,6 +135,7 @@ export default function Player({ title, exercises, onExit, onFinish }: Props) {
         {ex.kind === 'type' && <TypeAnswer ex={ex} locked={!!res} onAnswer={handleAnswer} />}
         {ex.kind === 'dialogue' && <Dialogue ex={ex} locked={!!res} onAnswer={handleAnswer} />}
         {ex.kind === 'drill' && <DrillEx ex={ex} locked={!!res} onAnswer={handleAnswer} />}
+        {ex.kind === 'say' && <SayEx ex={ex} locked={!!res} onAnswer={handleAnswer} />}
       </div>
 
       {res && (

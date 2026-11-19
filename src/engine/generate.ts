@@ -73,6 +73,11 @@ export function buildLessonExercises(lesson: Lesson, pool: Item[]): Exercise[] {
     .slice(0, 4)
     .forEach((it) => ex.push({ kind: 'type', item: it }));
 
+  // 2а. «Скажите вслух» — активное припоминание
+  shuffle(items.filter(isPhrase))
+    .slice(0, 3)
+    .forEach((it) => ex.push({ kind: 'say', item: it }));
+
   // 2б. Грамматические тренажёры
   const g = GRAMMAR[lesson.day];
   if (g) shuffle(g.drills).forEach((d) => ex.push({ kind: 'drill', drill: d }));

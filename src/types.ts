@@ -45,6 +45,7 @@ export interface Grammar {
 
 export type Exercise =
   | { kind: 'drill'; drill: Drill }
+  | { kind: 'say'; item: Item }
   | { kind: 'card'; item: Item }
   | {
       kind: 'choose';

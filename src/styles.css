@@ -885,3 +885,5 @@ h2 {
 .drill-full { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px; margin: 8px 0 12px; }
 .drill-es { font-weight: 800; font-size: 18px; margin-right: 8px; }
 .drill-full .drill-ru { margin: 4px 0 0; }
+.say-hint { color: var(--muted); margin: 0 0 16px; font-size: 15px; }
+.say-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
