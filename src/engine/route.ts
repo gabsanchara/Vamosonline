@@ -11,7 +11,9 @@ export type Route =
   | { name: 'reading'; lessonId: string }
   | { name: 'grammarList' }
   | { name: 'grammarDay'; day: number } // разбор из списка грамматики
-  | { name: 'review' };
+  | { name: 'review' }
+  | { name: 'postcards' }
+  | { name: 'profile' };
 
 export function parseRoute(hash: string): Route {
   const [a, b, c] = hash.replace(/^#\/?/, '').split('/').filter(Boolean);
@@ -23,7 +25,7 @@ export function parseRoute(hash: string): Route {
     const day = Number(b);
     return b && Number.isInteger(day) ? { name: 'grammarDay', day } : { name: 'grammarList' };
   }
-  if (a === 'review') return { name: 'review' };
+  if (a === 'review' || a === 'postcards' || a === 'profile') return { name: a };
   return { name: 'home' };
 }
 
@@ -42,7 +44,9 @@ export function routePath(r: Route): string {
     case 'grammarDay':
       return `/grammar/${r.day}`;
     case 'review':
-      return '/review';
+    case 'postcards':
+    case 'profile':
+      return `/${r.name}`;
   }
 }
 

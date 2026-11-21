@@ -1,4 +1,4 @@
-import { audioSlug } from './slug';
+import { voicedSlug } from './slug';
 
 // Только заранее озвученные файлы ElevenLabs (public/audio).
 // Браузерный голос не используется: если файла нет, звука не будет.
@@ -23,14 +23,15 @@ function loadManifest(): Promise<void> {
 
 loadManifest();
 
-export function speak(text: string, slow = false) {
+export function speak(text: string, slow = false, voice?: string) {
   const play = () => {
     if (current) {
       current.pause();
       current = null;
     }
-    const slug = audioSlug(text);
-    if (!manifest?.has(slug)) return;
+    // Если голосом персонажа фраза ещё не озвучена, пробуем общий голос.
+    const slug = [voicedSlug(text, voice), voicedSlug(text)].find((s) => manifest?.has(s));
+    if (!slug) return;
     const a = new Audio(`${base}${slug}.mp3`);
     a.playbackRate = slow ? 0.7 : 1;
     a.preservesPitch = true;

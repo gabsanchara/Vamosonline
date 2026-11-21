@@ -8,3 +8,9 @@ export function audioSlug(text: string): string {
   }
   return h.toString(16).padStart(8, '0');
 }
+
+// Имя файла для фразы, озвученной конкретным голосом. Без голоса — общий голос сайта
+// (так названы все старые файлы, поэтому они продолжают работать).
+export function voicedSlug(text: string, voice?: string): string {
+  return voice ? audioSlug(`${voice}|${text}`) : audioSlug(text);
+}

@@ -10,7 +10,7 @@ const crenels = (x0: number, x1: number, y: number, step = 16) => {
 };
 
 // Акведук в Сеговии: два яруса арок вырезаны через evenodd
-function aqueductPath(): string {
+export function aqueductPath(): string {
   const W = 408;
   let d = `M0 0 H${W} V-62 H0 Z M0 -62 H${W} V-112 H0 Z`;
   for (let i = 0; i < 12; i++) {
@@ -24,7 +24,7 @@ function aqueductPath(): string {
   return d;
 }
 
-function Windmill({ x, y, s, r }: { x: number; y: number; s: number; r: number }) {
+export function Windmill({ x, y, s, r }: { x: number; y: number; s: number; r: number }) {
   return (
     <g transform={`translate(${x},${y}) scale(${s})`}>
       <polygon points="-15,0 -9,-52 9,-52 15,0" />
@@ -41,7 +41,7 @@ function Windmill({ x, y, s, r }: { x: number; y: number; s: number; r: number }
   );
 }
 
-function SagradaFamilia() {
+export function SagradaFamilia() {
   const towers: [number, number][] = [
     [-84, 196],
     [-42, 232],
@@ -65,7 +65,7 @@ function SagradaFamilia() {
   );
 }
 
-function Alhambra() {
+export function Alhambra() {
   return (
     <g>
       <rect x="0" y="-52" width="430" height="52" />
@@ -81,7 +81,7 @@ function Alhambra() {
   );
 }
 
-function Giralda() {
+export function Giralda() {
   return (
     <g>
       <rect x="-32" y="-184" width="64" height="184" />
@@ -101,7 +101,7 @@ function Giralda() {
   );
 }
 
-function PuertaAlcala() {
+export function PuertaAlcala() {
   return (
     <g>
       <rect x="-90" y="-74" width="180" height="74" />

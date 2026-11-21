@@ -12,7 +12,7 @@ export function normWord(w: string): string {
   return w
     .toLowerCase()
     .replace(/^[¿¡«"“(]+/, '')
-    .replace(/[?!.,;:»"”)—–-]+$/, '');
+    .replace(/[?!.,;:»"”)—–…-]+$/, '');
 }
 
 export function tokensOf(text: string): string[] {
@@ -87,7 +87,7 @@ function splitUnits(es: string): Unit[] {
   return out;
 }
 
-const hasTail = (w: string) => /[?!.,;:»"”)]$/.test(w);
+const hasTail = (w: string) => /[?!.,;:»"”)…]$/.test(w);
 
 export function tokenize(es: string): Piece[] {
   const units = splitUnits(es);

@@ -10,7 +10,7 @@ export interface ExProps<T extends Exercise = Exercise> {
 }
 
 // Выбор варианта клавишами 1–9 на компьютере.
-function useNumberKeys(count: number, onPick: (i: number) => void, disabled: boolean) {
+export function useNumberKeys(count: number, onPick: (i: number) => void, disabled: boolean) {
   const pick = useRef(onPick);
   pick.current = onPick;
   useEffect(() => {
@@ -30,48 +30,54 @@ function useNumberKeys(count: number, onPick: (i: number) => void, disabled: boo
   }, [count, disabled]);
 }
 
-const OptKey = ({ n }: { n: number }) => (
+export const OptKey = ({ n }: { n: number }) => (
   <span className="opt-key" aria-hidden="true">
     {n}
   </span>
 );
 
-// «Скажите вслух»: ученик произносит фразу сам, потом сверяет с озвучкой и честно оценивает себя.
-export function SayEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'say' }>>) {
-  const [shown, setShown] = useState(false);
+// Выделяет в предложении нужную форму: «Yo me **llamo** Pablo».
+function Highlight({ text, part }: { text: string; part: string }) {
+  const i = part ? text.toLowerCase().indexOf(part.toLowerCase()) : -1;
+  if (i < 0) return <>{text}</>;
+  return (
+    <>
+      {text.slice(0, i)}
+      <mark className="ex-mark">{text.slice(i, i + part.length)}</mark>
+      {text.slice(i + part.length)}
+    </>
+  );
+}
+
+// «Как это работает»: грамматика на примере предложения — фраза, выделенная форма, объяснение.
+export function ExampleCard({ ex, onNext }: { ex: Extract<Exercise, { kind: 'example' }>; onNext: () => void }) {
+  const { drill } = ex;
+  const es = drill.es ?? '';
+  useEffect(() => {
+    if (es) speak(es);
+  }, [es]);
   return (
     <div className="ex">
-      <div className="ex-label">Скажите вслух по-испански</div>
-      <div className="prompt">
-        <span className="prompt-text">{ex.item.ru}</span>
+      <div className="ex-label">Как это работает · {ex.topic}</div>
+      <div className="card example">
+        {es && (
+          <div className="example-es">
+            <Highlight text={es} part={drill.answer} />
+          </div>
+        )}
+        {es && <Speaker text={es} />}
+        {drill.ru && <div className="card-ru">{drill.ru}</div>}
+        <div className="example-why">💡 {drill.why}</div>
+        {ex.mnemonic && (
+          <div className="mnem">
+            <span className="mnem-icon">{ex.mnemonic.icon}</span>
+            <span>{ex.mnemonic.text}</span>
+          </div>
+        )}
       </div>
-      <p className="say-hint">Произнесите фразу вслух, потом проверьте себя.</p>
-      {!shown ? (
-        <button
-          className="btn primary wide"
-          onClick={() => {
-            setShown(true);
-            speak(ex.item.es);
-          }}
-        >
-          Показать ответ
-        </button>
-      ) : (
-        <>
-          <div className="drill-full">
-            <span className="drill-es">{ex.item.es}</span>
-            <Speaker text={ex.item.es} />
-          </div>
-          <div className="say-actions">
-            <button className="btn ok" disabled={locked} onClick={() => onAnswer(true, ex.item.es)}>
-              Получилось
-            </button>
-            <button className="btn" disabled={locked} onClick={() => onAnswer(false, ex.item.es)}>
-              Повторю ещё
-            </button>
-          </div>
-        </>
-      )}
+      <button className="btn primary wide" onClick={onNext}>
+        Понятно
+      </button>
     </div>
   );
 }
@@ -119,13 +125,13 @@ export function DrillEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { ki
   );
 }
 
-export function Speaker({ text, big }: { text: string; big?: boolean }) {
+export function Speaker({ text, big, voice }: { text: string; big?: boolean; voice?: string }) {
   return (
     <span className="speakers">
-      <button className={`speaker ${big ? 'big' : ''}`} onClick={() => speak(text)} aria-label="Прослушать">
+      <button className={`speaker ${big ? 'big' : ''}`} onClick={() => speak(text, false, voice)} aria-label="Прослушать">
         🔊
       </button>
-      <button className="speaker slow" onClick={() => speak(text, true)} aria-label="Медленно">
+      <button className="speaker slow" onClick={() => speak(text, true, voice)} aria-label="Медленно">
         🐢
       </button>
     </span>
@@ -144,6 +150,7 @@ export function Card({ ex, onNext }: { ex: Extract<Exercise, { kind: 'card' }>; 
         <Speaker text={ex.item.es} big />
         <div className="card-ru">{ex.item.ru}</div>
         {ex.item.note && <div className="card-note">💡 {ex.item.note}</div>}
+        <div className="repeat-hint">🔁 Повторите вслух за озвучкой</div>
       </div>
       <button className="btn primary wide" onClick={onNext}>
         Понятно
@@ -286,51 +293,6 @@ export function TypeAnswer({ ex, locked, onAnswer }: ExProps<Extract<Exercise, {
           Проверить
         </button>
       )}
-    </div>
-  );
-}
-
-export function Dialogue({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'dialogue' }>>) {
-  const [picked, setPicked] = useState<string | null>(null);
-  const [opts] = useState(() => shuffle(ex.turn.options));
-  useEffect(() => {
-    speak(ex.turn.npcEs);
-  }, [ex]);
-  const answer = ex.turn.options.find((o) => o.ok)!;
-  const pick = (o: (typeof opts)[number]) => {
-    if (locked || picked !== null) return;
-    setPicked(o.es);
-    speak(o.es);
-    onAnswer(o.ok, answer.es);
-  };
-  useNumberKeys(opts.length, (i) => pick(opts[i]), locked);
-
-  return (
-    <div className="ex">
-      <div className="ex-label">Диалог{ex.first ? ` · ${ex.scene}` : ''}</div>
-      <div className="bubble npc">
-        <div className="who">{ex.npc}</div>
-        <div className="bubble-es">
-          {ex.turn.npcEs} <Speaker text={ex.turn.npcEs} />
-        </div>
-        <div className="bubble-ru">{ex.turn.npcRu}</div>
-      </div>
-      <div className="options">
-        {opts.map((o, i) => {
-          let cls = 'opt';
-          if (picked !== null) {
-            if (o.ok) cls += ' ok';
-            else if (o.es === picked) cls += ' bad';
-          }
-          return (
-            <button key={o.es} className={cls} disabled={locked} onClick={() => pick(o)}>
-              {o.es}
-              <span className="opt-sub">{o.ru}</span>
-              <OptKey n={i + 1} />
-            </button>
-          );
-        })}
-      </div>
     </div>
   );
 }

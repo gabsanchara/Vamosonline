@@ -6,6 +6,8 @@ import { COURSE } from '../src/content/course-es.ts';
 import { READINGS } from '../src/content/readings.ts';
 import { GRAMMAR } from '../src/content/grammar.ts';
 import { plainText, tokenize, tokensOf } from '../src/engine/gloss.ts';
+import { CHARACTERS, EPISODES, POSTCARDS } from '../src/content/story/index.ts';
+import { genderVariants, hasName, templateProblem } from '../src/engine/personalize.ts';
 
 const problems: string[] = [];
 const byRu = new Map<string, string[]>();
@@ -67,7 +69,48 @@ for (const g of Object.values(GRAMMAR)) {
   }
 }
 
+// История: эпизоды и открытки
+const lessonIds = new Set(COURSE.map((l) => l.id));
+let replies = 0;
+for (const ep of Object.values(EPISODES)) {
+  const tag = `Эпизод ${ep.lessonId}`;
+  if (!lessonIds.has(ep.lessonId)) problems.push(`${tag}: нет такого урока`);
+  if (!ep.title.trim() || !ep.hook.trim() || !ep.intro.length) problems.push(`${tag}: нужны название, вступление и крючок`);
+  if (ep.postcard && !POSTCARDS[ep.postcard]) problems.push(`${tag}: нет открытки «${ep.postcard}»`);
+  for (const id of ep.cast) if (!CHARACTERS[id]) problems.push(`${tag}: неизвестный персонаж ${id}`);
+  const texts = [ep.title, ep.hook, ep.recap ?? '', ...ep.intro];
+  ep.scene.forEach((l, i) => {
+    const at = `${tag}, реплика ${i + 1}`;
+    if (l.kind === 'narr') texts.push(l.ru);
+    if (l.kind === 'line') {
+      if (!CHARACTERS[l.who]) problems.push(`${at}: неизвестный персонаж ${l.who}`);
+      if (hasName(l.es)) problems.push(`${at}: {name} в озвучиваемой реплике персонажа`);
+      texts.push(l.es, l.ru, l.note ?? '');
+      // Каждое слово реплики персонажа должно переводиться по нажатию (в обоих вариантах рода)
+      for (const v of genderVariants(l.es))
+        for (const p of tokenize(v.text)) if (!p.known) problems.push(`${at}: нет перевода слова «${p.key}» в «${v.text}»`);
+    }
+    if (l.kind === 'reply') {
+      replies++;
+      if (l.bad.length < 2) problems.push(`${at}: меньше двух неверных вариантов`);
+      for (const b of l.bad) if (!b.why?.trim()) problems.push(`${at}: у варианта «${b.es}» нет объяснения`);
+      const all = [l.ok, ...l.bad];
+      if (new Set(all.map((o) => o.es)).size !== all.length) problems.push(`${at}: повторяются варианты`);
+      for (const o of all) texts.push(o.es, o.ru, o.why ?? '');
+      texts.push(l.note ?? '');
+    }
+  });
+  for (const t of texts) {
+    const bad = templateProblem(t);
+    if (bad) problems.push(`${tag}: ${bad} в «${t}»`);
+  }
+}
+for (const p of Object.values(POSTCARDS)) {
+  if (p.text.length < 2 || !p.es.trim() || !p.ru.trim()) problems.push(`Открытка ${p.id}: нужно описание и фраза`);
+}
+
 console.log(`Уроков: ${COURSE.length}, фраз в уроках: ${phrases}, предложений для чтения: ${sentences}`);
+console.log(`Эпизодов истории: ${Object.keys(EPISODES).length}, ответов героя: ${replies}, открыток: ${Object.keys(POSTCARDS).length}`);
 if (problems.length) {
   console.log(`Замечаний: ${problems.length}`);
   for (const p of problems) console.log(' - ' + p);

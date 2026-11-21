@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import type { Item, Progress, SrsCard } from '../types';
+import type { Item, Profile, Progress, SrsCard } from '../types';
 import { ALL_ITEMS, COURSE } from '../content/course-es';
 import { clearAllSessions } from './session';
 
@@ -129,6 +129,10 @@ export function useProgress() {
     setP((prev) => (prev.grammarRead?.[day] ? prev : { ...prev, grammarRead: { ...prev.grammarRead, [day]: true } }));
   }, []);
 
+  const setProfile = useCallback((profile: Profile) => {
+    setP((prev) => ({ ...prev, profile }));
+  }, []);
+
   const reset = useCallback(() => {
     clearAllSessions();
     setP({ ...empty });
@@ -141,5 +145,5 @@ export function useProgress() {
   const todayXp = p.log[dayKey()] ?? 0;
   const streakAlive = p.lastDay === dayKey() || p.lastDay === yesterdayKey();
 
-  return { p, finish, markGrammar, reset, dueItems, todayXp, streak: streakAlive ? p.streak : 0 };
+  return { p, finish, markGrammar, setProfile, reset, dueItems, todayXp, streak: streakAlive ? p.streak : 0 };
 }

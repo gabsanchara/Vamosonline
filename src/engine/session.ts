@@ -2,7 +2,8 @@ import type { Exercise, Item } from '../types';
 
 // Незаконченные уроки и повторения. Сохраняются после каждого шага,
 // поэтому выход, обновление страницы или жест «назад» не теряют прогресс урока.
-const KEY = 'vamos-sessions-v1';
+// v2: новые виды заданий (сцена, примеры, открытки). Незаконченные уроки старого формата не подхватываем.
+const KEY = 'vamos-sessions-v2';
 
 export interface SavedSession {
   title: string;
@@ -74,7 +75,7 @@ export function freshSession(title: string, exercises: Exercise[]): SavedSession
   return {
     title,
     total: exercises.length,
-    graded: exercises.filter((e) => e.kind !== 'card').length,
+    graded: exercises.filter((e) => e.kind !== 'card' && e.kind !== 'example' && e.kind !== 'postcard').length,
     queue: exercises,
     idx: 0,
     done: 0,

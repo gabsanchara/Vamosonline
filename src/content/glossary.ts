@@ -1,4 +1,5 @@
 import { GLOSSARY_B } from './glossary-b.ts';
+import { GLOSSARY_STORY } from './story/glossary-story.ts';
 // Перевод для подсказок над словами в разделе «Чтение».
 // Ключ: слово или устойчивое сочетание в нижнем регистре, без знаков препинания.
 // Сочетания из нескольких слов подбираются раньше одиночных слов.
@@ -497,4 +498,6 @@ export const GLOSSARY: Record<string, string> = {
   viaje: 'поездка',
 };
 
+// Слова из истории не перезаписывают основной словарь, только дополняют его
+for (const [k, v] of Object.entries(GLOSSARY_STORY)) if (!(k in GLOSSARY) && !(k in GLOSSARY_B)) GLOSSARY[k] = v;
 Object.assign(GLOSSARY, GLOSSARY_B);

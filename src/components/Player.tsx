@@ -1,7 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Exercise, Item } from '../types';
 import { clearSession, freshSession, loadSession, saveSession, type SavedSession } from '../engine/session';
-import { Build, Card, Choose, Dialogue, DrillEx, SayEx, TypeAnswer } from './Exercises';
+import { POSTCARDS } from '../content/story/index';
+import { usePersonalize } from '../engine/profile';
+import { Build, Card, Choose, DrillEx, ExampleCard, TypeAnswer } from './Exercises';
+import { PostcardArt, PostcardCard } from './Postcard';
+import Scene from './Scene';
 
 export interface PlayerResult {
   xp: number;
@@ -18,19 +22,33 @@ interface Props {
   onExit: () => void;
   onFinish: (r: PlayerResult) => void; // сразу при завершении: сохранить прогресс
   onContinue: () => void; // кнопка «Продолжить» на экране итогов
+  outro?: { hook?: string; postcard?: string }; // крючок истории и открытка на экране итогов
 }
 
+// Задания без оценки: их просто пролистывают
+const VIEW_ONLY = new Set<Exercise['kind']>(['card', 'example', 'postcard']);
+
 function itemOf(ex: Exercise): Item | null {
-  return ex.kind === 'dialogue' || ex.kind === 'drill' ? null : ex.item;
+  return 'item' in ex ? ex.item : null;
 }
 
 function idOf(e: Exercise): string {
-  if (e.kind === 'dialogue') return e.turn.npcEs;
-  if (e.kind === 'drill') return e.drill.q;
-  return e.item.id;
+  switch (e.kind) {
+    case 'drill':
+      return e.drill.q;
+    case 'example':
+      return `ex-${e.drill.q}`;
+    case 'postcard':
+      return `pc-${e.id}`;
+    case 'scene':
+      return `scene-${e.lessonId}`;
+    default:
+      return e.item.id;
+  }
 }
 
-export default function Player({ sessionKey, title, kind, build, onExit, onFinish, onContinue }: Props) {
+export default function Player({ sessionKey, title, kind, build, onExit, onFinish, onContinue, outro }: Props) {
+  const t = usePersonalize();
   const [init] = useState<SavedSession>(() => loadSession(sessionKey) ?? freshSession(title, build()));
   const [queue, setQueue] = useState<Exercise[]>(init.queue);
   const [idx, setIdx] = useState(init.idx);
@@ -107,8 +125,7 @@ export default function Player({ sessionKey, title, kind, build, onExit, onFinis
     onFinish(r);
   };
 
-  const next = () => {
-    const passed = ex.kind === 'card' || !!res?.ok;
+  const advance = (passed: boolean) => {
     setRes(null);
     if (idx + 1 >= queue.length) {
       complete();
@@ -116,6 +133,23 @@ export default function Player({ sessionKey, title, kind, build, onExit, onFinis
     }
     if (passed) setDoneCount((d) => d + 1);
     setIdx(idx + 1);
+  };
+
+  const next = () => advance(VIEW_ONLY.has(ex.kind) || !!res?.ok);
+
+  // Сцена сама даёт исправить ошибку, поэтому в конец урока не уходит.
+  // Каждая реплика героя считается отдельным ответом: для точности и XP важна первая попытка.
+  const handleScene = (results: boolean[]) => {
+    let gained = 0;
+    results.forEach((ok, i) => {
+      const k = `${idOf(ex)}-${i}`;
+      if (attempts.current.has(k)) return;
+      attempts.current.add(k);
+      firstTry.current.set(k, { item: null, ok });
+      if (ok) gained += 10;
+    });
+    if (gained) setXp((x) => x + gained);
+    advance(true);
   };
 
   // Enter: «Дальше» после ответа, «Понятно» на карточке, «Продолжить» на итогах.
@@ -129,7 +163,7 @@ export default function Player({ sessionKey, title, kind, build, onExit, onFinis
       if (s.result) {
         e.preventDefault();
         s.onContinue();
-      } else if (s.res || s.kind === 'card') {
+      } else if (s.res || (s.kind && VIEW_ONLY.has(s.kind))) {
         e.preventDefault();
         s.next();
       }
@@ -161,6 +195,22 @@ export default function Player({ sessionKey, title, kind, build, onExit, onFinis
               <span>точность</span>
             </div>
           </div>
+          {outro?.postcard && POSTCARDS[outro.postcard] && (
+            <div className="finish-postcard">
+              <span className="postcard-thumb">
+                <PostcardArt p={POSTCARDS[outro.postcard]} />
+              </span>
+              <span>
+                Новая открытка: <b>{POSTCARDS[outro.postcard].title}</b>
+              </span>
+            </div>
+          )}
+          {outro?.hook && (
+            <div className="finish-hook">
+              <b>Дальше в истории…</b>
+              <p>{t(outro.hook)}</p>
+            </div>
+          )}
           <button className="btn primary wide" onClick={onContinue}>
             Продолжить
           </button>
@@ -186,12 +236,13 @@ export default function Player({ sessionKey, title, kind, build, onExit, onFinis
 
       <div className="player-body" key={keyOf(ex, idx)}>
         {ex.kind === 'card' && <Card ex={ex} onNext={next} />}
+        {ex.kind === 'example' && <ExampleCard ex={ex} onNext={next} />}
+        {ex.kind === 'postcard' && <PostcardCard id={ex.id} onNext={next} />}
         {ex.kind === 'choose' && <Choose ex={ex} locked={!!res} onAnswer={handleAnswer} />}
         {ex.kind === 'build' && <Build ex={ex} locked={!!res} onAnswer={handleAnswer} />}
         {ex.kind === 'type' && <TypeAnswer ex={ex} locked={!!res} onAnswer={handleAnswer} />}
-        {ex.kind === 'dialogue' && <Dialogue ex={ex} locked={!!res} onAnswer={handleAnswer} />}
         {ex.kind === 'drill' && <DrillEx ex={ex} locked={!!res} onAnswer={handleAnswer} />}
-        {ex.kind === 'say' && <SayEx ex={ex} locked={!!res} onAnswer={handleAnswer} />}
+        {ex.kind === 'scene' && <Scene lessonId={ex.lessonId} onDone={handleScene} />}
       </div>
 
       {res && (

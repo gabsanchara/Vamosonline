@@ -5,6 +5,7 @@ export interface Item {
   note?: string;
 }
 
+// Старый формат диалога урока. Остаётся только для уроков, у которых ещё нет эпизода истории.
 export interface DialogueTurn {
   npcEs: string;
   npcRu: string;
@@ -43,9 +44,79 @@ export interface Grammar {
   drills: Drill[];
 }
 
+// ---- История ----
+
+export type Gender = 'm' | 'f';
+
+export interface Profile {
+  name: string;
+  gender: Gender;
+}
+
+export type CharId = 'hero' | 'lucia' | 'carlos' | 'pablo' | 'carmen' | 'miguel' | 'elena' | 'extraM' | 'extraF';
+
+export interface Character {
+  id: CharId;
+  name: string; // как подписан в чате
+  about: string; // кто это, по-русски
+  emoji: string;
+  color: string;
+  voice: string; // ID голоса ElevenLabs; пусто — общий голос сайта
+  voiceF?: string; // только у героя: женский голос
+}
+
+// Варианты ответа героя. В тексте можно писать {name} и {м|ж}, например «cansad{o|a}».
+export interface Reply {
+  es: string;
+  ru: string;
+  why?: string; // почему этот вариант не подходит (для неверных)
+}
+
+export type StoryLine =
+  // реплика персонажа: звучит его голосом; as — подпись вместо имени («Camarero», «Chica»)
+  | { kind: 'line'; who: Exclude<CharId, 'hero'>; as?: string; es: string; ru: string; note?: string }
+  // выбор героя: верный вариант и правдоподобные неверные с объяснением
+  | { kind: 'reply'; ok: Reply; bad: Reply[]; note?: string }
+  // ремарка рассказчика по-русски
+  | { kind: 'narr'; ru: string };
+
+export interface Episode {
+  lessonId: string;
+  title: string;
+  place: string;
+  recap?: string; // «Ранее…»; если нет — берётся крючок прошлого эпизода
+  intro: string[]; // вступление по-русски
+  cast: CharId[];
+  postcard?: string; // id открытки
+  scene: StoryLine[];
+  hook: string; // крючок в конце
+}
+
+export type PostcardArt = 'sol' | 'alcala' | 'alhambra' | 'giralda' | 'sagrada' | 'windmill' | 'aqueduct';
+
+export interface Postcard {
+  id: string;
+  title: string;
+  city: string;
+  art?: PostcardArt;
+  emoji: string; // если силуэта нет
+  text: string[]; // 2–3 предложения по-русски
+  es: string; // испанская фраза с озвучкой
+  ru: string;
+}
+
+export interface Chapter {
+  n: number;
+  title: string;
+  ru: string;
+  from: number; // номер первого урока
+  to: number;
+}
+
+// ---- Задания урока ----
+
 export type Exercise =
   | { kind: 'drill'; drill: Drill }
-  | { kind: 'say'; item: Item }
   | { kind: 'card'; item: Item }
   | {
       kind: 'choose';
@@ -56,7 +127,10 @@ export type Exercise =
     }
   | { kind: 'build'; item: Item; tiles: string[] }
   | { kind: 'type'; item: Item }
-  | { kind: 'dialogue'; npc: string; scene: string; turn: DialogueTurn; first: boolean };
+  // «Как это работает»: грамматика на примере предложения
+  | { kind: 'example'; drill: Drill; topic: string; mnemonic?: { icon: string; text: string } }
+  | { kind: 'postcard'; id: string }
+  | { kind: 'scene'; lessonId: string };
 
 export interface SrsCard {
   item: Item;
@@ -75,4 +149,5 @@ export interface Progress {
   srs: Record<string, SrsCard>;
   log: Record<string, number>; // date -> xp
   grammarRead?: Record<number, boolean>; // разборы, прочитанные до конца
+  profile?: Profile;
 }
