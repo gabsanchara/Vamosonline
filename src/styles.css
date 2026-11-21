@@ -957,7 +957,8 @@ h2 {
 
 /* ---- Сцена-переписка ---- */
 .chat { display: flex; flex-direction: column; gap: 12px; }
-.narr { text-align: center; color: var(--muted); font-style: italic; font-size: 14px; line-height: 1.45; padding: 0 12px; }
+/* Сюжетный текст: светлая плашка, чтобы не сливался с силуэтом города на фоне. */
+.narr { align-self: center; max-width: 94%; text-align: center; color: #4a3a31; font-style: italic; font-size: 15.5px; line-height: 1.5; padding: 10px 16px; background: rgba(255, 255, 255, 0.88); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); animation: fade-in 0.2s; }
 .msg { display: flex; gap: 10px; align-items: flex-end; animation: fade-in 0.2s; }
 .msg.hero { justify-content: flex-end; }
 .msg-avatar { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; background: var(--surface); border: 2px solid var(--who, var(--line)); }
