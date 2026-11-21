@@ -8,7 +8,8 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "check": "node --experimental-strip-types scripts/check-content.ts",
-    "audio":"node --experimental-strip-types scripts/generate-audio.ts"
+    "audio": "node --experimental-strip-types scripts/generate-audio.ts",
+    "voices": "node --experimental-strip-types scripts/voice-samples.ts"
   },
   "dependencies": {
     "react": "^18.3.1",
