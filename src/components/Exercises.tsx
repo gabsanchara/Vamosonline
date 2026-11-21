@@ -168,6 +168,8 @@ export function Choose({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kin
   const pick = (o: string) => {
     if (locked || picked !== null) return;
     setPicked(o);
+    // «Как это по-испански?»: варианты испанские — озвучиваем тот, что выбрал ученик.
+    if (ex.dir === 'ru-es') speak(o);
     onAnswer(o === ex.answer, ex.answer);
   };
   useNumberKeys(ex.options.length, (i) => pick(ex.options[i]), locked);
