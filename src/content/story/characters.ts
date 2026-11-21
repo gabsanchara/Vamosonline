@@ -1,7 +1,7 @@
 import type { CharId, Character } from '../../types';
 
-// Голоса ElevenLabs подбираются и утверждаются отдельно (этап «Голоса»).
-// Пока voice пустой, персонаж говорит общим голосом сайта.
+// Голоса ElevenLabs (библиотека, кастильский акцент), утверждены по пробным фразам (npm run voices).
+// Если voice пустой, персонаж говорит общим голосом сайта.
 export const CHARACTERS: Record<CharId, Character> = {
   hero: {
     id: 'hero',
@@ -9,8 +9,8 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Новичок в Мадриде, сотрудник турагентства «Viajes Sol».',
     emoji: '🙂',
     color: '#e8453c',
-    voice: '',
-    voiceF: '',
+    voice: '9iaRiYAiGlZImkI1Ruyh', // Antonio
+    voiceF: 'yiWEefwu5z3DQCM79clN', // Laura López
   },
   lucia: {
     id: 'lucia',
@@ -18,7 +18,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Соседка. Работает в старом книжном на улице Huertas, обожает тайны.',
     emoji: '👩🏽',
     color: '#c2327d',
-    voice: '',
+    voice: '3DPhHWXDY263XJ1d2EPN', // Linda Fiore
   },
   carlos: {
     id: 'carlos',
@@ -26,7 +26,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Коллега по агентству. Гурман и балагур.',
     emoji: '🧔🏻',
     color: '#d97a00',
-    voice: '',
+    voice: '7QQzpAyzlKTVrRzQJmTE', // Dani
   },
   pablo: {
     id: 'pablo',
@@ -34,7 +34,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Друг Лусии, фотограф. Не расстаётся с камерой.',
     emoji: '🧑🏻‍🦱',
     color: '#1f7a8c',
-    voice: '',
+    voice: '1MxuWc12WPRxDkgfT3kj', // Efrayn
   },
   carmen: {
     id: 'carmen',
@@ -42,7 +42,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Хозяйка квартиры. Строгая, но добрая. Что-то скрывает.',
     emoji: '👵🏻',
     color: '#6b4fa3',
-    voice: '',
+    voice: 'YDDaC9XKjODs7hY78qEW', // MariCarmen
   },
   miguel: {
     id: 'miguel',
@@ -50,7 +50,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Пожилой фотограф из Барселоны.',
     emoji: '👴🏻',
     color: '#3d6b3a',
-    voice: '',
+    voice: '5egO01tkUjEzu7xSSE8M', // Carmelo
   },
   elena: {
     id: 'elena',
@@ -58,7 +58,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Живёт в Консуэгре, у мельниц.',
     emoji: '👵🏼',
     color: '#a0522d',
-    voice: '',
+    voice: 'RTuKyXJgRGAQSx8Qz8Mf', // Tete
   },
   extraM: {
     id: 'extraM',
@@ -66,7 +66,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Эпизодический персонаж.',
     emoji: '🧑',
     color: '#5b6b7a',
-    voice: '',
+    voice: 'WWVK6dYMrl0ZHnHT7cRj', // Alejandro Castellanos
   },
   extraF: {
     id: 'extraF',
@@ -74,7 +74,7 @@ export const CHARACTERS: Record<CharId, Character> = {
     about: 'Эпизодический персонаж.',
     emoji: '👩',
     color: '#5b6b7a',
-    voice: '',
+    voice: 'ERYLdjEaddaiN9sDjaMX', // Gabriela Sainz
   },
 };
 
