@@ -18,7 +18,8 @@ for (const l of COURSE) {
   if (l.items.length === 0) problems.push(`${l.id}: урок пустой («Скоро»)`);
   for (const it of l.items) {
     phrases++;
-    if (ids.has(it.id)) problems.push(`Повторяется id ${it.id}`);
+    if (!it.id) problems.push(`${l.id}: у фразы «${it.es}» пустой id (нет ни одной буквы или цифры)`);
+    if (ids.has(it.id)) problems.push(`Повторяется id ${it.id} («${it.es}»)`);
     ids.add(it.id);
     byRu.set(it.ru.toLowerCase(), [...(byRu.get(it.ru.toLowerCase()) ?? []), `${l.id}: ${it.es}`]);
     byEs.set(it.es.toLowerCase(), [...(byEs.get(it.es.toLowerCase()) ?? []), l.id]);

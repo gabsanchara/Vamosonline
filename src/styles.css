@@ -229,6 +229,20 @@ h2 {
   font-size: 14px;
 }
 
+.read-reveal {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  border-top: 1px dashed var(--line);
+  font: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+  cursor: pointer;
+}
+
 .mark {
   background: #ffe08a;
   border-radius: 6px;
@@ -690,6 +704,38 @@ h2 {
   font-size: 13px;
   font-weight: 400;
   color: var(--muted);
+}
+
+/* Подсказка клавиши 1–4: только там, где есть мышь и клавиатура */
+.opt {
+  position: relative;
+}
+
+.opt-key {
+  display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .opt {
+    padding-right: 48px;
+  }
+
+  .opt-key {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--muted);
+  }
 }
 
 .answer-line {

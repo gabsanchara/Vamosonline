@@ -67,6 +67,7 @@ export interface SrsCard {
 }
 
 export interface Progress {
+  version?: number; // 2 — постоянные ID фраз
   xp: number;
   streak: number;
   lastDay: string;

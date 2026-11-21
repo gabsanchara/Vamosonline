@@ -1,72 +1,108 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { ALL_ITEMS, COURSE } from './content/course-es';
 import { buildLessonExercises, buildReviewExercises } from './engine/generate';
 import { DAILY_GOAL, useProgress } from './engine/store';
+import { useRoute, routePath, type Route } from './engine/route';
+import { clearSession, lessonKey, loadSession, REVIEW_KEY, sessionProgress } from './engine/session';
 import Player from './components/Player';
 import Reading, { hasReading } from './components/Reading';
 import GrammarCard from './components/GrammarCard';
 import { GRAMMAR } from './content/grammar';
-import type { Exercise, Lesson } from './types';
+import type { Lesson } from './types';
 
-type View =
-  | { name: 'home' }
-  | { name: 'grammar'; lesson: Lesson; thenPlay: boolean }
-  | { name: 'grammarList' }
-  | { name: 'intro'; lesson: Lesson }
-  | { name: 'reading'; lesson: Lesson }
-  | { name: 'play'; lessonId?: string; title: string; exercises: Exercise[] };
+const findLesson = (id: string): Lesson | undefined => COURSE.find((l) => l.id === id && l.items.length > 0);
+
+// Если адрес ведёт в никуда (урока нет, повторять нечего) — тихо уходим на главную или другой экран.
+function Redirect({ go, to = { name: 'home' } }: { go: (r: Route, o?: { replace?: boolean }) => void; to?: Route }) {
+  const target = routePath(to);
+  useEffect(() => {
+    go(to, { replace: true });
+  }, [go, target]);
+  return null;
+}
 
 export default function App() {
   const { p, finish, markGrammar, reset, dueItems, todayXp, streak } = useProgress();
-  const [view, setView] = useState<View>({ name: 'home' });
+  const { route, go } = useRoute();
+
+  // Можно ли открыть повторение, решаем один раз при входе: после завершения
+  // повторять уже нечего, но экран итогов должен остаться на месте.
+  const reviewOk = useRef(false);
+  if (route.name !== 'review') reviewOk.current = false;
+  else if (!reviewOk.current) reviewOk.current = !!loadSession(REVIEW_KEY) || dueItems.length > 0;
+
+  // Новый экран всегда открывается сверху
+  const path = routePath(route);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [path]);
 
   const available = useMemo(() => COURSE.filter((l) => l.items.length > 0), []);
   const goalPct = Math.min(100, Math.round((todayXp / DAILY_GOAL) * 100));
 
-  if (view.name === 'play') {
+  const lesson = 'lessonId' in route ? findLesson(route.lessonId) : undefined;
+  if ('lessonId' in route && !lesson) return <Redirect go={go} />;
+
+  if (route.name === 'play' && lesson) {
     return (
       <Player
-        title={view.title}
-        exercises={view.exercises}
-        onExit={() => setView({ name: 'home' })}
-        onFinish={(r) => {
-          finish({ lessonId: view.lessonId, xp: r.xp, stars: r.stars, results: r.results });
-          const lesson = COURSE.find((l) => l.id === view.lessonId);
-          // В конце урока сразу открываем чтение с новыми словами
-          setView(lesson && hasReading(lesson.day) ? { name: 'reading', lesson } : { name: 'home' });
-        }}
+        key={lessonKey(lesson.id)}
+        sessionKey={lessonKey(lesson.id)}
+        title={`Урок ${lesson.day}`}
+        kind="lesson"
+        build={() => buildLessonExercises(lesson, ALL_ITEMS)}
+        onExit={() => go({ name: 'intro', lessonId: lesson.id })}
+        onFinish={(r) => finish({ lessonId: lesson.id, xp: r.xp, stars: r.stars, results: r.results })}
+        // В конце урока сразу открываем чтение с новыми словами
+        onContinue={() =>
+          go(hasReading(lesson.day) ? { name: 'reading', lessonId: lesson.id } : { name: 'home' }, { replace: true })
+        }
       />
     );
   }
 
-  const startLesson = (l: Lesson) =>
-    setView({
-      name: 'play',
-      lessonId: l.id,
-      title: `Урок ${l.day}`,
-      exercises: buildLessonExercises(l, ALL_ITEMS),
-    });
+  if (route.name === 'review') {
+    if (!reviewOk.current) return <Redirect go={go} />;
+    return (
+      <Player
+        key={REVIEW_KEY}
+        sessionKey={REVIEW_KEY}
+        title="Повторение"
+        kind="review"
+        build={() => buildReviewExercises(dueItems, ALL_ITEMS)}
+        onExit={() => go({ name: 'home' })}
+        onFinish={(r) => finish({ xp: r.xp, results: r.results })}
+        onContinue={() => go({ name: 'home' }, { replace: true })}
+      />
+    );
+  }
 
-  if (view.name === 'grammar') {
-    const l = view.lesson;
+  if (route.name === 'grammar' && lesson) {
+    if (!GRAMMAR[lesson.day]) return <Redirect go={go} to={{ name: 'play', lessonId: lesson.id }} />;
     return (
       <GrammarCard
-        g={GRAMMAR[l.day]}
-        onRead={() => markGrammar(l.day)}
-        onBack={() => setView(view.thenPlay ? { name: 'intro', lesson: l } : { name: 'grammarList' })}
-        onStart={view.thenPlay ? () => startLesson(l) : undefined}
+        g={GRAMMAR[lesson.day]}
+        onRead={() => markGrammar(lesson.day)}
+        onBack={() => go({ name: 'intro', lessonId: lesson.id })}
+        onStart={() => go({ name: 'play', lessonId: lesson.id })}
       />
     );
   }
 
-  if (view.name === 'grammarList') {
+  if (route.name === 'grammarDay') {
+    const g = GRAMMAR[route.day];
+    if (!g) return <Redirect go={go} />;
+    return <GrammarCard g={g} onRead={() => markGrammar(route.day)} onBack={() => go({ name: 'grammarList' })} />;
+  }
+
+  if (route.name === 'grammarList') {
     const days = Object.keys(GRAMMAR)
       .map(Number)
       .sort((a, b) => a - b);
     const readCount = days.filter((d) => p.grammarRead?.[d]).length;
     return (
       <div className="screen">
-        <button className="back" onClick={() => setView({ name: 'home' })}>
+        <button className="back" onClick={() => go({ name: 'home' })}>
           ← Назад
         </button>
         <h1>Грамматика</h1>
@@ -76,14 +112,9 @@ export default function App() {
         </p>
         <div className="path">
           {days.map((d) => {
-            const l = COURSE.find((x) => x.day === d)!;
             const read = !!p.grammarRead?.[d];
             return (
-              <button
-                key={d}
-                className={`lesson ${read ? 'done' : ''}`}
-                onClick={() => setView({ name: 'grammar', lesson: l, thenPlay: false })}
-              >
+              <button key={d} className={`lesson ${read ? 'done' : ''}`} onClick={() => go({ name: 'grammarDay', day: d })}>
                 <span className="lesson-emoji">{GRAMMAR[d].emoji}</span>
                 <span className="lesson-body">
                   <span className="lesson-title">{GRAMMAR[d].title}</span>
@@ -97,15 +128,17 @@ export default function App() {
     );
   }
 
-  if (view.name === 'reading') {
-    return <Reading lesson={view.lesson} onDone={() => setView({ name: 'home' })} />;
+  if (route.name === 'reading' && lesson) {
+    return <Reading lesson={lesson} onDone={() => go({ name: 'home' })} />;
   }
 
-  if (view.name === 'intro') {
-    const l = view.lesson;
+  if (route.name === 'intro' && lesson) {
+    const l = lesson;
+    const saved = sessionProgress(lessonKey(l.id));
+    const start = () => go(GRAMMAR[l.day] ? { name: 'grammar', lessonId: l.id } : { name: 'play', lessonId: l.id });
     return (
       <div className="screen">
-        <button className="back" onClick={() => setView({ name: 'home' })}>
+        <button className="back" onClick={() => go({ name: 'home' })}>
           ← Назад
         </button>
         <div className="intro">
@@ -136,16 +169,28 @@ export default function App() {
             ))}
             {l.items.length > 6 && <div className="more">и ещё {l.items.length - 6}…</div>}
           </div>
-          <button
-            className="btn primary wide"
-            onClick={() =>
-              GRAMMAR[l.day] ? setView({ name: 'grammar', lesson: l, thenPlay: true }) : startLesson(l)
-            }
-          >
-            {GRAMMAR[l.day] ? 'Начать: разбор и урок' : 'Начать урок'}
-          </button>
+          {saved !== null ? (
+            <>
+              <button className="btn primary wide" onClick={() => go({ name: 'play', lessonId: l.id })}>
+                Продолжить урок · пройдено {Math.round(saved * 100)}%
+              </button>
+              <button
+                className="btn wide"
+                onClick={() => {
+                  clearSession(lessonKey(l.id));
+                  start();
+                }}
+              >
+                Начать заново
+              </button>
+            </>
+          ) : (
+            <button className="btn primary wide" onClick={start}>
+              {GRAMMAR[l.day] ? 'Начать: разбор и урок' : 'Начать урок'}
+            </button>
+          )}
           {p.completed[l.id] && hasReading(l.day) && (
-            <button className="btn wide" onClick={() => setView({ name: 'reading', lesson: l })}>
+            <button className="btn wide" onClick={() => go({ name: 'reading', lessonId: l.id })}>
               Читать предложения урока
             </button>
           )}
@@ -155,6 +200,7 @@ export default function App() {
   }
 
   const nextIdx = COURSE.findIndex((l) => !p.completed[l.id]);
+  const reviewSaved = sessionProgress(REVIEW_KEY);
 
   return (
     <div className="screen home">
@@ -185,27 +231,23 @@ export default function App() {
         {goalPct >= 100 && <div className="goal-done">Цель выполнена — отлично! 🎉</div>}
       </section>
 
-      <section className={`review ${dueItems.length ? 'due' : ''}`}>
+      <section className={`review ${dueItems.length || reviewSaved !== null ? 'due' : ''}`}>
         <div>
           <b>Повторение</b>
           <div className="muted">
-            {dueItems.length
-              ? `${dueItems.length} фраз ждут повтора, пока не забылись`
-              : 'Пока нечего повторять. Пройдите урок.'}
+            {reviewSaved !== null
+              ? `Начатое повторение · пройдено ${Math.round(reviewSaved * 100)}%`
+              : dueItems.length
+                ? `${dueItems.length} фраз ждут повтора, пока не забылись`
+                : 'Пока нечего повторять. Пройдите урок.'}
           </div>
         </div>
         <button
           className="btn primary"
-          disabled={!dueItems.length}
-          onClick={() =>
-            setView({
-              name: 'play',
-              title: 'Повторение',
-              exercises: buildReviewExercises(dueItems, ALL_ITEMS),
-            })
-          }
+          disabled={!dueItems.length && reviewSaved === null}
+          onClick={() => go({ name: 'review' })}
         >
-          Повторить
+          {reviewSaved !== null ? 'Продолжить' : 'Повторить'}
         </button>
       </section>
 
@@ -217,7 +259,7 @@ export default function App() {
             {Object.keys(GRAMMAR).filter((d) => p.grammarRead?.[Number(d)]).length} из {Object.keys(GRAMMAR).length}
           </div>
         </div>
-        <button className="btn" onClick={() => setView({ name: 'grammarList' })}>
+        <button className="btn" onClick={() => go({ name: 'grammarList' })}>
           Открыть
         </button>
       </section>
@@ -229,12 +271,13 @@ export default function App() {
           const hasContent = l.items.length > 0;
           const unlocked = hasContent && (i === 0 || !!p.completed[COURSE[i - 1].id] || !!done);
           const current = i === nextIdx && unlocked;
+          const inProgress = unlocked ? sessionProgress(lessonKey(l.id)) : null;
           return (
             <button
               key={l.id}
               className={`lesson ${done ? 'done' : ''} ${current ? 'current' : ''} ${unlocked ? '' : 'locked'}`}
               disabled={!unlocked}
-              onClick={() => setView({ name: 'intro', lesson: l })}
+              onClick={() => go({ name: 'intro', lessonId: l.id })}
             >
               <span className="lesson-emoji">{unlocked ? l.emoji : '🔒'}</span>
               <span className="lesson-body">
@@ -246,13 +289,17 @@ export default function App() {
                   <span className="lesson-goal">Скоро</span>
                 )}
               </span>
-              {done && (
+              {done && inProgress === null && (
                 <span className="lesson-stars">
                   {'★'.repeat(done.stars)}
                   <i>{'★'.repeat(3 - done.stars)}</i>
                 </span>
               )}
-              {current && <span className="go">Начать →</span>}
+              {inProgress !== null ? (
+                <span className="go">Продолжить · {Math.round(inProgress * 100)}%</span>
+              ) : (
+                current && <span className="go">Начать →</span>
+              )}
             </button>
           );
         })}

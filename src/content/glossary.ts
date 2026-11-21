@@ -46,6 +46,7 @@ export const GLOSSARY: Record<string, string> = {
   'muchas gracias': 'большое спасибо',
   'cómo se dice': 'как сказать',
   'buen viaje': 'счастливого пути',
+  'aquí tiene': 'вот, держите',
 
   // День 1
   hola: 'привет',
@@ -106,7 +107,7 @@ export const GLOSSARY: Record<string, string> = {
   quién: 'кто',
   qué: 'что',
   esto: 'это',
-  un: 'какой-то',
+  un: 'один / какой-то',
   libro: 'книга',
   hermano: 'брат',
   hermana: 'сестра',
@@ -154,7 +155,7 @@ export const GLOSSARY: Record<string, string> = {
   casa: 'дом',
   ciudad: 'город',
   perro: 'пёс',
-  una: 'какая-то',
+  una: 'одна / какая-то',
   problema: 'проблема',
   mano: 'рука',
   grande: 'большой',

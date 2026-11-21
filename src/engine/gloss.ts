@@ -59,15 +59,22 @@ export interface Piece {
 interface Unit {
   text: string;
   custom?: string;
+  // отдельно стоящий знак (тире, точка после разметки) — только для показа, в ключ слова не входит
+  suffix?: string;
 }
+
+const shown = (u: Unit) => u.text + (u.suffix ?? '');
 
 function splitUnits(es: string): Unit[] {
   const out: Unit[] = [];
   const push = (s: string) => {
     for (const w of s.split(/\s+/).filter(Boolean)) {
-      // знак препинания, отделённый от слова разметкой, приклеиваем к предыдущему
-      if (!/\p{L}/u.test(w) && out.length) out[out.length - 1].text += w;
-      else out.push({ text: w });
+      // знак препинания, отделённый от слова пробелом или разметкой, приклеиваем к предыдущему;
+      // тире отделяем пробелом, чтобы не получалось «tiene.—»
+      if (!/\p{L}/u.test(w) && out.length) {
+        const prev = out[out.length - 1];
+        prev.suffix = (prev.suffix ?? '') + (/^[—–-]+$/.test(w) ? ' ' + w : w);
+      } else out.push({ text: w });
     }
   };
   let last = 0;
@@ -91,7 +98,7 @@ export function tokenize(es: string): Piece[] {
     if (u.custom) {
       const toks = tokensOf(u.text);
       const day = Math.min(...toks.map((t) => firstDay(t)), Infinity);
-      pieces.push({ text: u.text, key: toks.join(' '), gloss: u.custom, day, known: true });
+      pieces.push({ text: shown(u), key: toks.join(' '), gloss: u.custom, day, known: true });
       i++;
       continue;
     }
@@ -99,17 +106,17 @@ export function tokenize(es: string): Piece[] {
     for (let n = 4; n >= 2 && !matched; n--) {
       const slice = units.slice(i, i + n);
       if (slice.length < n || slice.some((s) => s.custom)) continue;
-      if (slice.slice(0, -1).some((s) => hasTail(s.text))) continue;
+      if (slice.slice(0, -1).some((s) => hasTail(s.text) || s.suffix)) continue;
       const key = slice.map((s) => normWord(s.text)).join(' ');
       if (GLOSSARY[key]) {
-        pieces.push({ text: slice.map((s) => s.text).join(' '), key, gloss: GLOSSARY[key], day: firstDay(key), known: true });
+        pieces.push({ text: slice.map(shown).join(' '), key, gloss: GLOSSARY[key], day: firstDay(key), known: true });
         i += n;
         matched = true;
       }
     }
     if (matched) continue;
     const key = normWord(u.text);
-    pieces.push({ text: u.text, key, gloss: GLOSSARY[key] ?? '', day: firstDay(key), known: key in GLOSSARY });
+    pieces.push({ text: shown(u), key, gloss: GLOSSARY[key] ?? '', day: firstDay(key), known: key in GLOSSARY });
     i++;
   }
   return pieces;

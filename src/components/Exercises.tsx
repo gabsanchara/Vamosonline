@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Exercise } from '../types';
-import { normalize } from '../engine/generate';
+import { normalize, shuffle } from '../engine/generate';
 import { speak } from '../engine/tts';
 
 export interface ExProps<T extends Exercise = Exercise> {
@@ -8,6 +8,33 @@ export interface ExProps<T extends Exercise = Exercise> {
   locked: boolean;
   onAnswer: (ok: boolean, solution: string, why?: string) => void;
 }
+
+// Выбор варианта клавишами 1–9 на компьютере.
+function useNumberKeys(count: number, onPick: (i: number) => void, disabled: boolean) {
+  const pick = useRef(onPick);
+  pick.current = onPick;
+  useEffect(() => {
+    if (disabled) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+      const t = e.target as HTMLElement | null;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+      const n = Number(e.key);
+      if (Number.isInteger(n) && n >= 1 && n <= count) {
+        e.preventDefault();
+        pick.current(n - 1);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [count, disabled]);
+}
+
+const OptKey = ({ n }: { n: number }) => (
+  <span className="opt-key" aria-hidden="true">
+    {n}
+  </span>
+);
 
 // «Скажите вслух»: ученик произносит фразу сам, потом сверяет с озвучкой и честно оценивает себя.
 export function SayEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'say' }>>) {
@@ -51,7 +78,14 @@ export function SayEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind
 
 export function DrillEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'drill' }>>) {
   const [picked, setPicked] = useState<string | null>(null);
-  const [opts] = useState(() => [...ex.drill.options].sort(() => Math.random() - 0.5));
+  const [opts] = useState(() => shuffle(ex.drill.options));
+  const pick = (o: string) => {
+    if (locked || picked !== null) return;
+    setPicked(o);
+    if (ex.drill.es) speak(ex.drill.es);
+    onAnswer(o === ex.drill.answer, ex.drill.answer, ex.drill.why);
+  };
+  useNumberKeys(opts.length, (i) => pick(opts[i]), locked);
   return (
     <div className="ex">
       <div className="ex-label">Грамматика</div>
@@ -67,24 +101,16 @@ export function DrillEx({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { ki
         </div>
       )}
       <div className="options">
-        {opts.map((o) => {
+        {opts.map((o, i) => {
           let cls = 'opt';
           if (picked !== null) {
             if (o === ex.drill.answer) cls += ' ok';
             else if (o === picked) cls += ' bad';
           }
           return (
-            <button
-              key={o}
-              className={cls}
-              disabled={locked}
-              onClick={() => {
-                setPicked(o);
-                if (ex.drill.es) speak(ex.drill.es);
-                onAnswer(o === ex.drill.answer, ex.drill.answer, ex.drill.why);
-              }}
-            >
+            <button key={o} className={cls} disabled={locked} onClick={() => pick(o)}>
               {o}
+              <OptKey n={i + 1} />
             </button>
           );
         })}
@@ -132,6 +158,13 @@ export function Choose({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kin
     if (ex.dir !== 'ru-es') speak(ex.item.es);
   }, [ex]);
 
+  const pick = (o: string) => {
+    if (locked || picked !== null) return;
+    setPicked(o);
+    onAnswer(o === ex.answer, ex.answer);
+  };
+  useNumberKeys(ex.options.length, (i) => pick(ex.options[i]), locked);
+
   const label =
     ex.dir === 'es-ru' ? 'Выберите перевод' : ex.dir === 'ru-es' ? 'Как это по-испански?' : 'Что вы услышали?';
 
@@ -149,23 +182,16 @@ export function Choose({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kin
         {ex.dir === 'listen' && <Speaker text={ex.item.es} big />}
       </div>
       <div className="options">
-        {ex.options.map((o) => {
+        {ex.options.map((o, i) => {
           let cls = 'opt';
           if (picked !== null) {
             if (o === ex.answer) cls += ' ok';
             else if (o === picked) cls += ' bad';
           }
           return (
-            <button
-              key={o}
-              className={cls}
-              disabled={locked}
-              onClick={() => {
-                setPicked(o);
-                onAnswer(o === ex.answer, ex.answer);
-              }}
-            >
+            <button key={o} className={cls} disabled={locked} onClick={() => pick(o)}>
               {o}
+              <OptKey n={i + 1} />
             </button>
           );
         })}
@@ -227,7 +253,9 @@ export function Build({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind
 export function TypeAnswer({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'type' }>>) {
   const [value, setValue] = useState('');
   const ref = useRef<HTMLInputElement>(null);
-  useEffect(() => ref.current?.focus(), [ex]);
+  useEffect(() => {
+    ref.current?.focus();
+  }, [ex]);
 
   const submit = () => {
     if (!value.trim() || locked) return;
@@ -264,11 +292,18 @@ export function TypeAnswer({ ex, locked, onAnswer }: ExProps<Extract<Exercise, {
 
 export function Dialogue({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'dialogue' }>>) {
   const [picked, setPicked] = useState<string | null>(null);
-  const [opts] = useState(() => [...ex.turn.options].sort(() => Math.random() - 0.5));
+  const [opts] = useState(() => shuffle(ex.turn.options));
   useEffect(() => {
     speak(ex.turn.npcEs);
   }, [ex]);
   const answer = ex.turn.options.find((o) => o.ok)!;
+  const pick = (o: (typeof opts)[number]) => {
+    if (locked || picked !== null) return;
+    setPicked(o.es);
+    speak(o.es);
+    onAnswer(o.ok, answer.es);
+  };
+  useNumberKeys(opts.length, (i) => pick(opts[i]), locked);
 
   return (
     <div className="ex">
@@ -281,25 +316,17 @@ export function Dialogue({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { k
         <div className="bubble-ru">{ex.turn.npcRu}</div>
       </div>
       <div className="options">
-        {opts.map((o) => {
+        {opts.map((o, i) => {
           let cls = 'opt';
           if (picked !== null) {
             if (o.ok) cls += ' ok';
             else if (o.es === picked) cls += ' bad';
           }
           return (
-            <button
-              key={o.es}
-              className={cls}
-              disabled={locked}
-              onClick={() => {
-                setPicked(o.es);
-                speak(o.es);
-                onAnswer(o.ok, answer.es);
-              }}
-            >
+            <button key={o.es} className={cls} disabled={locked} onClick={() => pick(o)}>
               {o.es}
               <span className="opt-sub">{o.ru}</span>
+              <OptKey n={i + 1} />
             </button>
           );
         })}

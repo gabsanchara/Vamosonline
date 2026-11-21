@@ -10,6 +10,8 @@ export function hasReading(day: number): boolean {
 
 export default function Reading({ lesson, onDone }: { lesson: Lesson; onDone: () => void }) {
   const [hide, setHide] = useState(false);
+  // в режиме самопроверки перевод предложения открывается по нажатию
+  const [revealed, setRevealed] = useState<Set<number>>(new Set());
   const sentences = useMemo(
     () =>
       (READINGS[lesson.day] ?? []).map(([es, ru]) => ({
@@ -30,8 +32,14 @@ export default function Reading({ lesson, onDone }: { lesson: Lesson; onDone: ()
         Слова, которые вы выучили в этом уроке, <span className="mark">выделены</span>. Над остальными стоит перевод. Нажмите 🔊,
         чтобы послушать предложение.
         <div>
-          <button className="hint-toggle" onClick={() => setHide((h) => !h)}>
-            {hide ? 'Показать подсказки над словами' : 'Проверить себя: скрыть подсказки'}
+          <button
+            className="hint-toggle"
+            onClick={() => {
+              setHide((h) => !h);
+              setRevealed(new Set());
+            }}
+          >
+            {hide ? 'Показать подсказки и перевод' : 'Проверить себя: скрыть подсказки и перевод'}
           </button>
         </div>
       </div>
@@ -53,7 +61,13 @@ export default function Reading({ lesson, onDone }: { lesson: Lesson; onDone: ()
               </div>
               <Speaker text={s.plain} />
             </div>
-            <div className="read-ru">{s.ru}</div>
+            {hide && !revealed.has(i) ? (
+              <button className="read-ru read-reveal" onClick={() => setRevealed((r) => new Set(r).add(i))}>
+                Показать перевод
+              </button>
+            ) : (
+              <div className="read-ru">{s.ru}</div>
+            )}
           </div>
         ))}
       </div>
