@@ -1,5 +1,5 @@
 import type { Lesson } from '../types';
-import { items, turn } from './helpers.ts';
+import { items } from './helpers.ts';
 
 // Неделя 3: дни 15–22. Глаголы, время, город, транспорт, покупки.
 export const week3: Lesson[] = [
@@ -27,14 +27,6 @@ export const week3: Lesson[] = [
       ['¿Hablas inglés?', 'Ты говоришь по-английски?'],
       ['Hablo un poco de español', 'Я немного говорю по-испански'],
     ]),
-    dialogue: {
-      scene: 'Вы знакомитесь с коллегой.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿Hablas español?', 'Ты говоришь по-испански?', ['Sí, hablo un poco de español', 'Да, я немного говорю по-испански'], [['Es un libro', 'Это книга'], ['Hasta mañana', 'До завтра']]),
-        turn('¿Dónde trabajas?', 'Где ты работаешь?', ['Trabajo en Madrid', 'Я работаю в Мадриде'], [['Estoy cansado', 'Я устал'], ['Con leche', 'С молоком']]),
-      ],
-    },
   },
   {
     id: 'd16',
@@ -59,15 +51,6 @@ export const week3: Lesson[] = [
       ['Vivimos en Madrid', 'Мы живём в Мадриде'],
       ['Ellos beben vino', 'Они пьют вино'],
     ]),
-    dialogue: {
-      scene: 'Разговор за обедом.',
-      npc: 'Pablo',
-      turns: [
-        turn('¿Dónde vives?', 'Где ты живёшь?', ['Vivo en Rusia', 'Я живу в России'], [['Hablo ruso', 'Я говорю по-русски'], ['Es mi hermana', 'Это моя сестра']]),
-        turn('¿Qué bebes?', 'Что ты пьёшь?', ['Bebo agua', 'Я пью воду'], [['Tengo veinte años', 'Мне двадцать лет'], ['Buenas noches', 'Добрый вечер']]),
-        turn('¿Lees mucho?', 'Ты много читаешь?', ['Sí, leo un libro', 'Да, я читаю книгу'], [['Hasta luego', 'До скорого'], ['Soy de Rusia', 'Я из России']]),
-      ],
-    },
   },
   {
     id: 'd17',
@@ -94,14 +77,6 @@ export const week3: Lesson[] = [
       ['A las ocho', 'В восемь'],
       ['La cena es a las nueve', 'Ужин в девять'],
     ]),
-    dialogue: {
-      scene: 'На улице вас останавливает прохожий.',
-      npc: 'Peatón',
-      turns: [
-        turn('Perdona, ¿qué hora es?', 'Извини, который час?', ['Son las cinco menos cuarto', 'Без четверти пять'], [['Tengo hambre', 'Я голоден'], ['Hasta mañana', 'До завтра']]),
-        turn('¿A qué hora es la cena?', 'Во сколько ужин?', ['La cena es a las nueve', 'Ужин в девять'], [['Soy estudiante', 'Я студент'], ['Es un libro', 'Это книга']]),
-      ],
-    },
   },
   {
     id: 'd18',
@@ -131,14 +106,6 @@ export const week3: Lesson[] = [
       ['diciembre', 'декабрь'],
       ['el fin de semana', 'выходные'],
     ]),
-    dialogue: {
-      scene: 'Вы планируете неделю с Лусией.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Qué día es hoy?', 'Какой сегодня день?', ['Hoy es viernes', 'Сегодня пятница'], [['Es mi hermana', 'Это моя сестра'], ['Tengo sed', 'Я хочу пить']]),
-        turn('¿Y mañana?', 'А завтра?', ['Mañana es sábado', 'Завтра суббота'], [['Soy ruso', 'Я русский'], ['Con leche', 'С молоком']]),
-      ],
-    },
   },
   {
     id: 'd19',
@@ -167,14 +134,6 @@ export const week3: Lesson[] = [
       ['Está cerca', 'Это близко'],
       ['Está lejos', 'Это далеко'],
     ]),
-    dialogue: {
-      scene: 'Вы встречаете соседа на улице.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿Adónde vas?', 'Куда ты идёшь?', ['Voy al parque', 'Я иду в парк'], [['Tengo frío', 'Мне холодно'], ['Me llamo Ana', 'Меня зовут Ана']]),
-        turn('¿Está lejos?', 'Это далеко?', ['No, está cerca', 'Нет, это близко'], [['Soy estudiante', 'Я студент'], ['Hasta mañana', 'До завтра']]),
-      ],
-    },
   },
   {
     id: 'd20',
@@ -200,15 +159,6 @@ export const week3: Lesson[] = [
       ['¿Puede repetir, por favor?', 'Повторите, пожалуйста'],
       ['Muchas gracias', 'Большое спасибо'],
     ]),
-    dialogue: {
-      scene: 'Турист спрашивает у вас дорогу.',
-      npc: 'Turista',
-      turns: [
-        turn('Perdone, ¿dónde está el banco?', 'Извините, где банк?', ['Siga recto, está a la derecha', 'Идите прямо, это справа'], [['Tengo hambre', 'Я голоден'], ['Estoy cansado', 'Я устал']]),
-        turn('¿Está lejos?', 'Это далеко?', ['No, está cerca', 'Нет, это близко'], [['Me llamo Ana', 'Меня зовут Ана'], ['Con leche', 'С молоком']]),
-        turn('Muchas gracias.', 'Большое спасибо.', ['De nada', 'Не за что'], [['Buenos días', 'Доброе утро'], ['Por favor', 'Пожалуйста (в просьбе)']]),
-      ],
-    },
   },
   {
     id: 'd21',
@@ -236,15 +186,6 @@ export const week3: Lesson[] = [
       ['Voy en metro', 'Я еду на метро'],
       ['¿Cuánto cuesta el billete?', 'Сколько стоит билет?'],
     ]),
-    dialogue: {
-      scene: 'Вы у кассы на вокзале.',
-      npc: 'Taquillero',
-      turns: [
-        turn('Buenos días. ¿Adónde va?', 'Доброе утро. Куда вы едете?', ['Voy a Barcelona', 'Я еду в Барселону'], [['Soy estudiante', 'Я студент'], ['Tengo sed', 'Я хочу пить']]),
-        turn('Son diez euros.', 'Десять евро.', ['Gracias. ¿A qué hora sale el tren?', 'Спасибо. Во сколько отправляется поезд?'], [['Es un libro', 'Это книга'], ['Hasta mañana', 'До завтра']]),
-        turn('A las nueve y media.', 'В половине десятого.', ['Muchas gracias', 'Большое спасибо'], [['Estoy en casa', 'Я дома'], ['Soy ruso', 'Я русский']]),
-      ],
-    },
   },
   {
     id: 'd22',
@@ -271,13 +212,5 @@ export const week3: Lesson[] = [
       ['Cuesta veinte euros', 'Это стоит двадцать евро'],
       ['Lo compro', 'Я беру это'],
     ]),
-    dialogue: {
-      scene: 'Вы в магазине сувениров.',
-      npc: 'Dependiente',
-      turns: [
-        turn('¿Puedo ayudarle?', 'Я могу вам помочь?', ['Quiero comprar esto', 'Я хочу купить это'], [['Hasta mañana', 'До завтра'], ['Tengo veinte años', 'Мне двадцать лет']]),
-        turn('Cuesta veinte euros. ¿En efectivo o con tarjeta?', 'Двадцать евро. Наличными или картой?', ['Con tarjeta, por favor', 'Картой, пожалуйста'], [['Buenas noches', 'Добрый вечер'], ['Estoy en casa', 'Я дома']]),
-      ],
-    },
   },
 ];

@@ -1,5 +1,5 @@
 import type { Lesson } from '../types';
-import { items, turn } from './helpers.ts';
+import { items } from './helpers.ts';
 
 // Неделя 2: дни 6–14. Существительные, артикли, tener, estar, семья, дом, еда.
 export const week2: Lesson[] = [
@@ -27,14 +27,6 @@ export const week2: Lesson[] = [
       ['Tengo un perro', 'У меня есть собака'],
       ['La casa es grande', 'Дом большой'],
     ]),
-    dialogue: {
-      scene: 'Новый знакомый расспрашивает вас о доме.',
-      npc: 'Pablo',
-      turns: [
-        turn('¿Tienes un perro?', 'У тебя есть собака?', ['Sí, tengo un perro', 'Да, у меня есть собака'], [['Es mi hermana', 'Это моя сестра'], ['Hasta luego', 'До скорого']]),
-        turn('¿La casa es grande?', 'Дом большой?', ['Sí, la casa es grande', 'Да, дом большой'], [['Me llamo Ana', 'Меня зовут Ана'], ['Tengo sed', 'Я хочу пить']]),
-      ],
-    },
   },
   {
     id: 'd07',
@@ -62,14 +54,6 @@ export const week2: Lesson[] = [
       ['Tengo dos libros', 'У меня две книги'],
       ['Tengo tres amigos', 'У меня три друга'],
     ]),
-    dialogue: {
-      scene: 'Вы болтаете с Лусией о друзьях и книгах.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Cuántos amigos tienes?', 'Сколько у тебя друзей?', ['Tengo tres amigos', 'У меня три друга'], [['Soy de Rusia', 'Я из России'], ['Es un libro', 'Это книга']]),
-        turn('¿Tienes libros?', 'У тебя есть книги?', ['Sí, tengo dos libros', 'Да, у меня две книги'], [['Estoy bien', 'У меня всё хорошо'], ['Buenas noches', 'Добрый вечер']]),
-      ],
-    },
   },
   {
     id: 'd08',
@@ -94,14 +78,6 @@ export const week2: Lesson[] = [
       ['Tengo prisa', 'Я спешу'],
       ['No tengo dinero', 'У меня нет денег'],
     ]),
-    dialogue: {
-      scene: 'Лусия замечает, что вы выглядите уставшим.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Tienes frío?', 'Тебе холодно?', ['Sí, tengo frío', 'Да, мне холодно'], [['Soy estudiante', 'Я студент'], ['Buenos días', 'Доброе утро']]),
-        turn('¿Tienes prisa?', 'Ты спешишь?', ['No, no tengo prisa', 'Нет, я не спешу'], [['Es mi hermano', 'Это мой брат'], ['Hasta mañana', 'До завтра']]),
-      ],
-    },
   },
   {
     id: 'd09',
@@ -125,14 +101,6 @@ export const week2: Lesson[] = [
       ['El café está caliente', 'Кофе горячий'],
       ['Estoy en el trabajo', 'Я на работе'],
     ]),
-    dialogue: {
-      scene: 'Друг звонит вам по телефону.',
-      npc: 'Pablo',
-      turns: [
-        turn('¿Dónde estás?', 'Где ты?', ['Estoy en casa', 'Я дома'], [['Soy de Rusia', 'Я из России'], ['Tengo hambre', 'Я голоден']]),
-        turn('¿Cómo estás hoy?', 'Как ты сегодня?', ['Estoy cansado', 'Я устал'], [['Es un libro', 'Это книга'], ['Con leche', 'С молоком']]),
-      ],
-    },
   },
   {
     id: 'd10',
@@ -159,14 +127,6 @@ export const week2: Lesson[] = [
       ['Tengo una hermana', 'У меня есть сестра'],
       ['Mis padres están en casa', 'Мои родители дома'],
     ]),
-    dialogue: {
-      scene: 'Вы показываете семейное фото.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Tienes una familia grande?', 'У тебя большая семья?', ['Sí, mi familia es grande', 'Да, моя семья большая'], [['Estoy cansado', 'Я устал'], ['Con leche', 'С молоком']]),
-        turn('¿Dónde están tus padres?', 'Где твои родители?', ['Mis padres están en casa', 'Мои родители дома'], [['Tengo hambre', 'Я голоден'], ['Adiós', 'До свидания']]),
-      ],
-    },
   },
   {
     id: 'd11',
@@ -195,14 +155,6 @@ export const week2: Lesson[] = [
       ['Un libro rojo', 'Красная книга'],
       ['Mi casa es pequeña', 'Мой дом маленький'],
     ]),
-    dialogue: {
-      scene: 'Лусия спрашивает про ваш дом и питомца.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿De qué color es tu casa?', 'Какого цвета твой дом?', ['Mi casa es blanca', 'Мой дом белый'], [['Tengo sed', 'Я хочу пить'], ['Soy estudiante', 'Я студент']]),
-        turn('¿Y tu perro?', 'А твоя собака?', ['Mi perro es negro', 'Моя собака чёрная'], [['Estoy en casa', 'Я дома'], ['Hasta mañana', 'До завтра']]),
-      ],
-    },
   },
   {
     id: 'd12',
@@ -229,14 +181,6 @@ export const week2: Lesson[] = [
       ['¿Hay un baño?', 'Есть ли ванная?'],
       ['Mi casa tiene tres habitaciones', 'В моём доме три комнаты'],
     ]),
-    dialogue: {
-      scene: 'Вы осматриваете квартиру, которую хотите снять.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿Hay un baño?', 'Есть ли ванная?', ['Sí, hay un baño', 'Да, есть ванная'], [['Tengo frío', 'Мне холодно'], ['Soy ruso', 'Я русский']]),
-        turn('¿Cuántas habitaciones hay?', 'Сколько здесь комнат?', ['Hay tres habitaciones', 'Есть три комнаты'], [['Es un libro', 'Это книга'], ['Estoy bien', 'У меня всё хорошо']]),
-      ],
-    },
   },
   {
     id: 'd13',
@@ -263,14 +207,6 @@ export const week2: Lesson[] = [
       ['Quiero pescado', 'Я хочу рыбу'],
       ['Una mesa para dos', 'Столик на двоих'],
     ]),
-    dialogue: {
-      scene: 'Вы в ресторане в центре Мадрида.',
-      npc: 'Camarero',
-      turns: [
-        turn('¿Qué desea?', 'Что желаете?', ['Quiero sopa, por favor', 'Я хочу суп, пожалуйста'], [['Hasta mañana', 'До завтра'], ['Me llamo Ana', 'Меня зовут Ана']]),
-        turn('¿Algo de beber?', 'Что-нибудь выпить?', ['Agua, por favor', 'Воды, пожалуйста'], [['Buenos días', 'Доброе утро'], ['Soy de Rusia', 'Я из России']]),
-      ],
-    },
   },
   {
     id: 'd14',
@@ -294,14 +230,5 @@ export const week2: Lesson[] = [
       ['Mis abuelos tienen una casa nueva', 'У моих бабушки и дедушки новый дом'],
       ['Mi familia es pequeña', 'Моя семья маленькая'],
     ]),
-    dialogue: {
-      scene: 'Вы приглашаете друга в гости.',
-      npc: 'Pablo',
-      turns: [
-        turn('¡Hola! ¿Cómo es tu casa?', 'Привет! Какой у тебя дом?', ['Mi casa es grande y blanca', 'Мой дом большой и белый'], [['Estoy cansado', 'Я устал'], ['Tengo veinte años', 'Мне двадцать лет']]),
-        turn('¿Hay una cocina?', 'Есть кухня?', ['Sí, hay una cocina', 'Да, есть кухня'], [['Adiós', 'До свидания'], ['Soy estudiante', 'Я студент']]),
-        turn('¿Tienes hambre?', 'Ты голоден?', ['Sí, quiero sopa y pan', 'Да, я хочу суп и хлеб'], [['Hasta luego', 'До скорого'], ['Es mi hermana', 'Это моя сестра']]),
-      ],
-    },
   },
 ];

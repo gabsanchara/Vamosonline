@@ -5,13 +5,7 @@ export interface Item {
   note?: string;
 }
 
-// Старый формат диалога урока. Остаётся только для уроков, у которых ещё нет эпизода истории.
-export interface DialogueTurn {
-  npcEs: string;
-  npcRu: string;
-  options: { es: string; ru: string; ok: boolean }[];
-}
-
+// Диалоги уроков теперь — сцены эпизодов истории (src/content/story).
 export interface Lesson {
   id: string;
   day: number;
@@ -20,7 +14,6 @@ export interface Lesson {
   goal: string;
   tip?: { title: string; text: string };
   items: Item[];
-  dialogue?: { scene: string; npc: string; turns: DialogueTurn[] };
 }
 
 export interface Drill {

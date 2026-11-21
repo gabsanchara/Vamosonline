@@ -42,13 +42,7 @@ function collectJobs(): Job[] {
     if (t) jobs.set(voicedSlug(t, voice), { text: t, voice, who });
   };
 
-  for (const l of COURSE) {
-    for (const i of l.items) add(i.es);
-    for (const t of l.dialogue?.turns ?? []) {
-      add(t.npcEs);
-      for (const o of t.options) add(o.es);
-    }
-  }
+  for (const l of COURSE) for (const i of l.items) add(i.es);
   for (const g of Object.values(GRAMMAR)) for (const d of g.drills) if (d.es) add(d.es);
   for (const list of Object.values(READINGS)) for (const [es] of list) add(plainText(es));
   for (const p of Object.values(POSTCARDS)) add(p.es);

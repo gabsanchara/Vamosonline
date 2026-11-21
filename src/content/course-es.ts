@@ -1,5 +1,5 @@
 import type { Item, Lesson } from '../types';
-import { items, turn } from './helpers.ts';
+import { items } from './helpers.ts';
 import { week2 } from './lessons-w2.ts';
 import { week3 } from './lessons-w3.ts';
 import { week4 } from './lessons-w4.ts';
@@ -31,15 +31,6 @@ const full: Lesson[] = [
       ['No', 'Нет'],
       ['Perdón', 'Извините'],
     ]),
-    dialogue: {
-      scene: 'Вы заходите в кафе утром.',
-      npc: 'Carlos',
-      turns: [
-        turn('¡Buenos días!', 'Доброе утро!', ['Buenos días', 'Доброе утро'], [['Buenas noches', 'Добрый вечер'], ['Adiós', 'До свидания']]),
-        turn('Aquí tiene.', 'Вот, пожалуйста.', ['Gracias', 'Спасибо'], [['De nada', 'Не за что'], ['No', 'Нет']]),
-        turn('Gracias a usted. ¡Hasta luego!', 'Вам спасибо. До скорого!', ['Hasta luego', 'До скорого'], [['Buenos días', 'Доброе утро'], ['Por favor', 'Пожалуйста']]),
-      ],
-    },
   },
   {
     id: 'd02',
@@ -64,15 +55,6 @@ const full: Lesson[] = [
       ['¿De dónde eres?', 'Откуда ты?'],
       ['Soy de Rusia', 'Я из России'],
     ]),
-    dialogue: {
-      scene: 'Вы знакомитесь с Пабло на вечеринке.',
-      npc: 'Pablo',
-      turns: [
-        turn('¡Hola! ¿Cómo te llamas?', 'Привет! Как тебя зовут?', ['Me llamo Ana', 'Меня зовут Ана'], [['Estoy bien', 'У меня всё хорошо'], ['Soy de Rusia', 'Я из России']]),
-        turn('Mucho gusto. ¿De dónde eres?', 'Очень приятно. Откуда ты?', ['Soy de Rusia', 'Я из России'], [['Me llamo Ana', 'Меня зовут Ана'], ['Hasta mañana', 'До завтра']]),
-        turn('¿Cómo estás?', 'Как дела?', ['Muy bien, gracias. ¿Y tú?', 'Очень хорошо, спасибо. А у тебя?'], [['De nada', 'Не за что'], ['Adiós', 'До свидания']]),
-      ],
-    },
   },
   {
     id: 'd03',
@@ -97,15 +79,6 @@ const full: Lesson[] = [
       ['Es mi hermano', 'Это мой брат'],
       ['Es mi hermana', 'Это моя сестра'],
     ]),
-    dialogue: {
-      scene: 'Карлос показывает вам фотографии.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿Quién es ella?', 'Кто она?', ['Es mi hermana', 'Это моя сестра'], [['Es un libro', 'Это книга'], ['Soy estudiante', 'Я студент']]),
-        turn('¿Qué es esto?', 'Что это?', ['Es un libro', 'Это книга'], [['Es mi amigo', 'Это мой друг'], ['Somos amigos', 'Мы друзья']]),
-        turn('¿Y tú? ¿Quién eres?', 'А ты? Кто ты?', ['Soy estudiante', 'Я студент'], [['Es mi hermano', 'Это мой брат'], ['Hasta luego', 'До скорого']]),
-      ],
-    },
   },
   {
     id: 'd04',
@@ -133,14 +106,6 @@ const full: Lesson[] = [
       ['¿Cuántos años tienes?', 'Сколько тебе лет?'],
       ['Tengo dos hermanos', 'У меня двое братьев (брат и сестра)'],
     ]),
-    dialogue: {
-      scene: 'Вас спрашивают про возраст и семью.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Cuántos años tienes?', 'Сколько тебе лет?', ['Tengo veinte años', 'Мне двадцать лет'], [['Soy de Rusia', 'Я из России'], ['Estoy bien', 'У меня всё хорошо']]),
-        turn('¿Tienes hermanos?', 'У тебя есть братья или сёстры?', ['Tengo dos hermanos', 'У меня двое'], [['Es un libro', 'Это книга'], ['Hasta mañana', 'До завтра']]),
-      ],
-    },
   },
   {
     id: 'd05',
@@ -164,15 +129,6 @@ const full: Lesson[] = [
       ['Tengo hambre', 'Я голоден'],
       ['Tengo sed', 'Я хочу пить'],
     ]),
-    dialogue: {
-      scene: 'Вы в кафе в Мадриде. Подходит официант.',
-      npc: 'Camarero',
-      turns: [
-        turn('Buenas tardes. ¿Qué quiere?', 'Добрый день. Что желаете?', ['Un café, por favor', 'Кофе, пожалуйста'], [['Hasta luego', 'До скорого'], ['Me llamo Ana', 'Меня зовут Ана']]),
-        turn('¿Con leche o sin leche?', 'С молоком или без?', ['Con leche', 'С молоком'], [['Soy de Rusia', 'Я из России'], ['Buenos días', 'Доброе утро']]),
-        turn('Aquí tiene su café.', 'Вот ваш кофе.', ['Gracias', 'Спасибо'], [['No', 'Нет'], ['Adiós', 'До свидания']]),
-      ],
-    },
   },
 ];
 

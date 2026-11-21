@@ -1,5 +1,5 @@
 import type { Lesson } from '../types';
-import { items, turn } from './helpers.ts';
+import { items } from './helpers.ts';
 
 // Неделя 4: дни 23–30. Одежда, погода, хобби, распорядок, прошлое, планы, отель, финал.
 export const week4: Lesson[] = [
@@ -30,15 +30,6 @@ export const week4: Lesson[] = [
       ['Es demasiado grande', 'Слишком большое'],
       ['Es demasiado pequeño', 'Слишком маленькое'],
     ]),
-    dialogue: {
-      scene: 'Вы в магазине одежды.',
-      npc: 'Dependienta',
-      turns: [
-        turn('¿Qué busca?', 'Что вы ищете?', ['Busco una camisa azul', 'Я ищу синюю рубашку'], [['Soy de Rusia', 'Я из России'], ['Hasta luego', 'До скорого']]),
-        turn('¿Qué talla tiene?', 'Какой у вас размер?', ['No sé. ¿Puedo probármela?', 'Не знаю. Можно её примерить?'], [['Tengo sed', 'Я хочу пить'], ['Es mi hermano', 'Это мой брат']]),
-        turn('Le queda muy bien.', 'Вам очень идёт.', ['Gracias, la compro', 'Спасибо, я её беру'], [['Es demasiado pequeña', 'Она слишком маленькая'], ['Buenos días', 'Доброе утро']]),
-      ],
-    },
   },
   {
     id: 'd24',
@@ -66,14 +57,6 @@ export const week4: Lesson[] = [
       ['el otoño', 'осень'],
       ['Me gusta el verano', 'Мне нравится лето'],
     ]),
-    dialogue: {
-      scene: 'Лусия звонит вам из Мадрида.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Qué tiempo hace hoy en Moscú?', 'Какая сегодня погода в Москве?', ['Hace frío y nieva', 'Холодно и идёт снег'], [['Tengo hambre', 'Я голоден'], ['Es un libro', 'Это книга']]),
-        turn('¿Te gusta el invierno?', 'Тебе нравится зима?', ['No, me gusta el verano', 'Нет, мне нравится лето'], [['Soy estudiante', 'Я студент'], ['Hasta mañana', 'До завтра']]),
-      ],
-    },
   },
   {
     id: 'd25',
@@ -101,14 +84,6 @@ export const week4: Lesson[] = [
       ['No me gusta correr', 'Мне не нравится бегать'],
       ['¿Y a ti?', 'А тебе?'],
     ]),
-    dialogue: {
-      scene: 'Вы знакомитесь с новыми людьми на вечеринке.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Qué haces en tu tiempo libre?', 'Чем ты занимаешься в свободное время?', ['Me gusta bailar y cantar', 'Мне нравится танцевать и петь'], [['Estoy en casa', 'Я дома'], ['Tengo sed', 'Я хочу пить']]),
-        turn('A mí me gusta el fútbol. ¿Y a ti?', 'Мне нравится футбол. А тебе?', ['Me gusta la música', 'Мне нравится музыка'], [['Son las tres y media', 'Половина четвёртого'], ['Adiós', 'До свидания']]),
-      ],
-    },
   },
   {
     id: 'd26',
@@ -134,15 +109,6 @@ export const week4: Lesson[] = [
       ['por la noche', 'вечером, ночью'],
       ['¿A qué hora te levantas?', 'Во сколько ты встаёшь?'],
     ]),
-    dialogue: {
-      scene: 'Вас спрашивают о вашем обычном дне.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿A qué hora te levantas?', 'Во сколько ты встаёшь?', ['Me levanto a las siete', 'Я встаю в семь'], [['Tengo hambre', 'Я голоден'], ['Es mi hermana', 'Это моя сестра']]),
-        turn('¿Y a qué hora cenas?', 'А во сколько ты ужинаешь?', ['Ceno a las nueve', 'Я ужинаю в девять'], [['Soy ruso', 'Я русский'], ['Buenos días', 'Доброе утро']]),
-        turn('¿Cuándo trabajas?', 'Когда ты работаешь?', ['Trabajo por la mañana', 'Я работаю по утрам'], [['Estoy cansado', 'Я устал'], ['Con leche', 'С молоком']]),
-      ],
-    },
   },
   {
     id: 'd27',
@@ -168,14 +134,6 @@ export const week4: Lesson[] = [
       ['La semana pasada', 'На прошлой неделе'],
       ['El año pasado', 'В прошлом году'],
     ]),
-    dialogue: {
-      scene: 'В понедельник коллега спрашивает о выходных.',
-      npc: 'Pablo',
-      turns: [
-        turn('¿Qué hiciste ayer?', 'Что ты делал вчера?', ['Fui al parque', 'Я ходил в парк'], [['Hace sol', 'Солнечно'], ['Tengo sed', 'Я хочу пить']]),
-        turn('¿Y qué comiste?', 'А что ты ел?', ['Comí pescado', 'Я ел рыбу'], [['Son las nueve', 'Девять часов'], ['Buenas noches', 'Добрый вечер']]),
-      ],
-    },
   },
   {
     id: 'd28',
@@ -201,15 +159,6 @@ export const week4: Lesson[] = [
       ['Vale', 'Хорошо, ладно'],
       ['Voy a comprar un billete', 'Я собираюсь купить билет'],
     ]),
-    dialogue: {
-      scene: 'Вы строите планы на выходные.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Qué vas a hacer mañana?', 'Что ты собираешься делать завтра?', ['Voy a trabajar por la mañana', 'Я буду работать утром'], [['Estoy cansado', 'Я устал'], ['Es un libro', 'Это книга']]),
-        turn('¿Y el sábado?', 'А в субботу?', ['El sábado voy a descansar', 'В субботу я буду отдыхать'], [['Soy estudiante', 'Я студент'], ['Con leche', 'С молоком']]),
-        turn('¿Vamos al cine esta noche?', 'Пойдём сегодня вечером в кино?', ['Vale, vamos', 'Хорошо, пойдём'], [['Hasta mañana', 'До завтра'], ['Tengo veinte años', 'Мне двадцать лет']]),
-      ],
-    },
   },
   {
     id: 'd29',
@@ -237,15 +186,6 @@ export const week4: Lesson[] = [
       ['Quisiera una habitación', 'Я бы хотел номер'],
       ['Aquí tiene', 'Вот, пожалуйста'],
     ]),
-    dialogue: {
-      scene: 'Вы приехали в отель и стоите у стойки регистрации.',
-      npc: 'Recepcionista',
-      turns: [
-        turn('Buenas tardes. ¿En qué puedo ayudarle?', 'Добрый день. Чем могу помочь?', ['Tengo una reserva', 'У меня есть бронь'], [['Hasta luego', 'До скорого'], ['Tengo sed', 'Я хочу пить']]),
-        turn('¿Me da su pasaporte, por favor?', 'Дайте, пожалуйста, ваш паспорт.', ['Aquí tiene', 'Вот, пожалуйста'], [['No sé', 'Не знаю'], ['Es un libro', 'Это книга']]),
-        turn('Su habitación es la 305.', 'Ваш номер 305.', ['Gracias. ¿Está incluido el desayuno?', 'Спасибо. Завтрак включён?'], [['Estoy cansado', 'Я устал'], ['Buenas noches', 'Добрый вечер']]),
-      ],
-    },
   },
   {
     id: 'd30',
@@ -270,16 +210,5 @@ export const week4: Lesson[] = [
       ['¡Hasta pronto!', 'До скорой встречи!'],
       ['¡Buen viaje!', 'Счастливого пути!'],
     ]),
-    dialogue: {
-      scene: 'Вы только что прилетели в Мадрид. Вас встречает Карлос.',
-      npc: 'Carlos',
-      turns: [
-        turn('¡Hola! ¿Cómo te llamas?', 'Привет! Как тебя зовут?', ['Me llamo Ana y soy de Rusia', 'Меня зовут Ана, я из России'], [['Es un libro', 'Это книга'], ['Tengo sed', 'Я хочу пить']]),
-        turn('¡Qué bien! ¿Hablas español?', 'Как здорово! Ты говоришь по-испански?', ['Hablo un poco de español', 'Я немного говорю по-испански'], [['Hasta mañana', 'До завтра'], ['Estoy en casa', 'Я дома']]),
-        turn('¿Quieres un café?', 'Хочешь кофе?', ['Sí, un café con leche, por favor', 'Да, кофе с молоком, пожалуйста'], [['Adiós', 'До свидания'], ['Soy estudiante', 'Я студент']]),
-        turn('¿Qué vas a hacer mañana?', 'Что ты собираешься делать завтра?', ['Voy a viajar a Barcelona', 'Я собираюсь поехать в Барселону'], [['Son las nueve', 'Девять часов'], ['Hace frío', 'Холодно на улице']]),
-        turn('¡Buen viaje! ¡Hasta pronto!', 'Счастливого пути! До скорой встречи!', ['¡Hasta pronto, gracias!', 'До скорой встречи, спасибо!'], [['Buenos días', 'Доброе утро'], ['No entiendo', 'Я не понимаю']]),
-      ],
-    },
   },
 ];

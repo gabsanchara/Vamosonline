@@ -1,4 +1,4 @@
-import type { DialogueTurn, Item } from '../types';
+import type { Item } from '../types';
 
 export type Row = [string, string, string?];
 
@@ -18,20 +18,4 @@ export function phraseId(es: string): string {
 // фразу можно перенести в другой урок без потери истории.
 export function items(_lesson: string, rows: Row[]): Item[] {
   return rows.map(([es, ru, note]) => ({ id: phraseId(es), es, ru, note }));
-}
-
-export function turn(
-  npcEs: string,
-  npcRu: string,
-  ok: [string, string],
-  bad: [string, string][],
-): DialogueTurn {
-  return {
-    npcEs,
-    npcRu,
-    options: [
-      { es: ok[0], ru: ok[1], ok: true },
-      ...bad.map(([es, ru]) => ({ es, ru, ok: false })),
-    ],
-  };
 }

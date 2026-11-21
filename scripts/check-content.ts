@@ -26,12 +26,6 @@ for (const l of COURSE) {
     byRu.set(it.ru.toLowerCase(), [...(byRu.get(it.ru.toLowerCase()) ?? []), `${l.id}: ${it.es}`]);
     byEs.set(it.es.toLowerCase(), [...(byEs.get(it.es.toLowerCase()) ?? []), l.id]);
   }
-  for (const [i, t] of (l.dialogue?.turns ?? []).entries()) {
-    const ok = t.options.filter((o) => o.ok).length;
-    if (ok !== 1) problems.push(`${l.id} диалог, реплика ${i + 1}: верных ответов ${ok}, должен быть 1`);
-    if (t.options.length < 3) problems.push(`${l.id} диалог, реплика ${i + 1}: меньше трёх вариантов`);
-  }
-
   // Чтение
   const reading = READINGS[l.day];
   if (!reading || reading.length === 0) {
@@ -71,6 +65,7 @@ for (const g of Object.values(GRAMMAR)) {
 
 // История: эпизоды и открытки
 const lessonIds = new Set(COURSE.map((l) => l.id));
+for (const l of COURSE) if (!EPISODES[l.id]) problems.push(`${l.id}: нет эпизода истории`);
 let replies = 0;
 for (const ep of Object.values(EPISODES)) {
   const tag = `Эпизод ${ep.lessonId}`;
@@ -88,7 +83,8 @@ for (const ep of Object.values(EPISODES)) {
       texts.push(l.es, l.ru, l.note ?? '');
       // Каждое слово реплики персонажа должно переводиться по нажатию (в обоих вариантах рода)
       for (const v of genderVariants(l.es))
-        for (const p of tokenize(v.text)) if (!p.known) problems.push(`${at}: нет перевода слова «${p.key}» в «${v.text}»`);
+        for (const p of tokenize(v.text))
+          if (!p.known && /\p{L}/u.test(p.key)) problems.push(`${at}: нет перевода слова «${p.key}» в «${v.text}»`);
     }
     if (l.kind === 'reply') {
       replies++;

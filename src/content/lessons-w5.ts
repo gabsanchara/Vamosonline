@@ -1,5 +1,5 @@
 import type { Lesson } from '../types';
-import { items, turn } from './helpers.ts';
+import { items } from './helpers.ts';
 
 // Уроки 31–40: продолжение курса. Модальные глаголы, hacer, глаголы на -go,
 // conocer / saber, местоимения lo / la, состояния, события в прошлом, приглашения, работа, imperfecto.
@@ -29,15 +29,6 @@ export const week5: Lesson[] = [
       ['Tenemos que salir', 'Нам надо выходить'],
       ['¿Puedo pasar?', 'Можно войти?'],
     ]),
-    dialogue: {
-      scene: 'Коллега просит вас о помощи.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿Puedes ayudarme?', 'Ты можешь мне помочь?', ['Sí, puedo ayudarte', 'Да, я могу тебе помочь'], [['Tengo veinte años', 'Мне двадцать лет'], ['Hace sol', 'Солнечно']]),
-        turn('¿Qué necesitas?', 'Что тебе нужно?', ['Necesito un café', 'Мне нужен кофе'], [['Soy de Rusia', 'Я из России'], ['Hasta mañana', 'До завтра']]),
-        turn('¿Puedes hablar ahora?', 'Ты можешь сейчас говорить?', ['No, tengo que trabajar', 'Нет, мне надо работать'], [['Es un libro', 'Это книга'], ['Buenas noches', 'Добрый вечер']]),
-      ],
-    },
   },
   {
     id: 'd32',
@@ -63,14 +54,6 @@ export const week5: Lesson[] = [
       ['Ellos hacen deporte los lunes', 'По понедельникам они занимаются спортом'],
       ['No hago nada', 'Я ничего не делаю'],
     ]),
-    dialogue: {
-      scene: 'Вы болтаете с Пабло о планах.',
-      npc: 'Pablo',
-      turns: [
-        turn('¿Qué haces los sábados?', 'Что ты делаешь по субботам?', ['Hago deporte por la mañana', 'Утром я занимаюсь спортом'], [['Soy estudiante', 'Я студент'], ['Con leche', 'С молоком']]),
-        turn('¿Qué haces ahora?', 'Что ты делаешь сейчас?', ['No hago nada', 'Я ничего не делаю'], [['Hasta luego', 'До скорого'], ['Es mi hermana', 'Это моя сестра']]),
-      ],
-    },
   },
   {
     id: 'd33',
@@ -96,14 +79,6 @@ export const week5: Lesson[] = [
       ['No digo nada', 'Я ничего не говорю'],
       ['Vengo a las nueve', 'Я приду в девять'],
     ]),
-    dialogue: {
-      scene: 'Лусия ждёт вас у вокзала.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿De dónde vienes?', 'Откуда ты приходишь?', ['Vengo del trabajo', 'Я иду с работы'], [['Tengo sed', 'Я хочу пить'], ['Soy ruso', 'Я русский']]),
-        turn('¿Cuándo sales de casa?', 'Когда ты выходишь из дома?', ['Salgo de casa a las ocho', 'Я выхожу из дома в восемь'], [['Estoy cansado', 'Я устал'], ['Es un libro', 'Это книга']]),
-      ],
-    },
   },
   {
     id: 'd34',
@@ -129,15 +104,6 @@ export const week5: Lesson[] = [
       ['Sabemos bailar', 'Мы умеем танцевать'],
       ['Ella sabe mucho', 'Она много знает'],
     ]),
-    dialogue: {
-      scene: 'Вы разговариваете с новым знакомым.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿Conoces Madrid?', 'Ты знаешь Мадрид?', ['Sí, conozco Madrid', 'Да, я знаю Мадрид'], [['Tengo hambre', 'Я голоден'], ['Buenas noches', 'Добрый вечер']]),
-        turn('¿Sabes bailar?', 'Ты умеешь танцевать?', ['Sí, sé bailar', 'Да, я умею танцевать'], [['Hace calor', 'Жарко на улице'], ['Soy estudiante', 'Я студент']]),
-        turn('¿Conoces a Lucía?', 'Ты знаком с Лусией?', ['Sí, conozco a Lucía', 'Да, я знаком с Лусией'], [['Estoy en casa', 'Я дома'], ['Con leche', 'С молоком']]),
-      ],
-    },
   },
   {
     id: 'd35',
@@ -164,15 +130,6 @@ export const week5: Lesson[] = [
       ['Las compro en la tienda', 'Я покупаю их в магазине'],
       ['Nos ven', 'Они нас видят'],
     ]),
-    dialogue: {
-      scene: 'Вы собираетесь в поездку с Пабло.',
-      npc: 'Pablo',
-      turns: [
-        turn('¿Tienes el billete?', 'У тебя есть билет?', ['Sí, lo tengo', 'Да, он у меня есть'], [['Hace sol', 'Солнечно'], ['Soy ruso', 'Я русский']]),
-        turn('¿Y la llave?', 'А ключ?', ['La tengo', 'Он у меня'], [['Es un libro', 'Это книга'], ['Con leche', 'С молоком']]),
-        turn('¿Ves a Ana?', 'Ты видишь Ану?', ['Sí, la veo', 'Да, я вижу её'], [['Hasta mañana', 'До завтра'], ['Tengo sed', 'Я хочу пить']]),
-      ],
-    },
   },
   {
     id: 'd36',
@@ -199,15 +156,6 @@ export const week5: Lesson[] = [
       ['Estoy nervioso', 'Я нервничаю'],
       ['Ella está enferma', 'Она больна'],
     ]),
-    dialogue: {
-      scene: 'Вы договариваетесь с коллегой перед встречей.',
-      npc: 'Carlos',
-      turns: [
-        turn('¿Estás listo?', 'Ты готов?', ['Sí, estoy listo', 'Да, я готов'], [['Tengo hambre', 'Я голоден'], ['Buenos días', 'Доброе утро']]),
-        turn('¿Estás ocupado hoy?', 'Ты сегодня занят?', ['No, no estoy ocupado', 'Нет, я не занят'], [['Es mi hermana', 'Это моя сестра'], ['Con leche', 'С молоком']]),
-        turn('Es una buena idea, ¿no?', 'Хорошая идея, да?', ['Sí, estoy de acuerdo', 'Да, я согласен'], [['Soy ruso', 'Я русский'], ['Hace frío', 'Холодно на улице']]),
-      ],
-    },
   },
   {
     id: 'd37',
@@ -234,15 +182,6 @@ export const week5: Lesson[] = [
       ['Fue una noticia importante', 'Это была важная новость'],
       ['Es importante', 'Это важно'],
     ]),
-    dialogue: {
-      scene: 'Лусия спрашивает, как прошёл ваш вечер.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Cómo fue la película?', 'Как прошёл фильм?', ['Fue muy interesante', 'Это было очень интересно'], [['Tengo sed', 'Я хочу пить'], ['Hasta mañana', 'До завтра']]),
-        turn('¿Fue difícil?', 'Это было трудно?', ['No, fue fácil', 'Нет, это было легко'], [['Soy ruso', 'Я русский'], ['Con leche', 'С молоком']]),
-        turn('¿Te gustó?', 'Тебе понравилось?', ['Sí, fue tan divertido', 'Да, это было так весело'], [['Hace sol', 'Солнечно'], ['Estoy en casa', 'Я дома']]),
-      ],
-    },
   },
   {
     id: 'd38',
@@ -269,15 +208,6 @@ export const week5: Lesson[] = [
       ['¿Dónde quedamos?', 'Где встретимся?'],
       ['Quedamos en la plaza', 'Встретимся на площади'],
     ]),
-    dialogue: {
-      scene: 'Лусия зовёт вас на вечер.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Qué tal si vamos al cine?', 'Как насчёт того, чтобы пойти в кино?', ['Me parece bien', 'Меня устраивает'], [['Tengo sed', 'Я хочу пить'], ['Soy ruso', 'Я русский']]),
-        turn('¿A qué hora quedamos?', 'Во сколько встретимся?', ['Quedamos a las siete', 'Встретимся в семь'], [['Hace calor', 'Жарко на улице'], ['Es un libro', 'Это книга']]),
-        turn('¿Y dónde quedamos?', 'А где встретимся?', ['Quedamos en la plaza', 'Встретимся на площади'], [['Hasta mañana', 'До завтра'], ['Estoy cansado', 'Я устал']]),
-      ],
-    },
   },
   {
     id: 'd39',
@@ -304,15 +234,6 @@ export const week5: Lesson[] = [
       ['Ayer empecé un trabajo nuevo', 'Вчера я начал новую работу'],
       ['Mi compañero es muy amable', 'Мой коллега очень любезный'],
     ]),
-    dialogue: {
-      scene: 'Пабло делится новостью.',
-      npc: 'Pablo',
-      turns: [
-        turn('Tengo una buena noticia: encontré trabajo.', 'У меня хорошая новость: я нашёл работу.', ['¡Qué bien!', 'Как здорово!'], [['Tengo sed', 'Я хочу пить'], ['Con leche', 'С молоком']]),
-        turn('¿Dónde trabajas ahora?', 'Где ты теперь работаешь?', ['Trabajo en una oficina', 'Я работаю в офисе'], [['Hace frío', 'Холодно на улице'], ['Soy ruso', 'Я русский']]),
-        turn('¿A qué hora empiezas?', 'Во сколько ты начинаешь?', ['Empiezo a las nueve', 'Я начинаю в девять'], [['Es mi hermana', 'Это моя сестра'], ['Hasta mañana', 'До завтра']]),
-      ],
-    },
   },
   {
     id: 'd40',
@@ -339,14 +260,5 @@ export const week5: Lesson[] = [
       ['¿Qué hacías anoche?', 'Чем ты занимался вчера ночью?'],
       ['Esperaba el tren', 'Я ждал поезд'],
     ]),
-    dialogue: {
-      scene: 'Лусия расспрашивает вас о детстве.',
-      npc: 'Lucía',
-      turns: [
-        turn('¿Dónde vivías de niño?', 'Где ты жил ребёнком?', ['Vivía en Moscú', 'Я жил в Москве'], [['Tengo sed', 'Я хочу пить'], ['Hace sol', 'Солнечно']]),
-        turn('¿Qué hacías los domingos?', 'Что ты делал по воскресеньям?', ['Íbamos al parque', 'Мы ходили в парк'], [['Soy ruso', 'Я русский'], ['Con leche', 'С молоком']]),
-        turn('¿Cómo era tu abuela?', 'Какой была твоя бабушка?', ['Era muy simpática', 'Она была очень милой'], [['Estoy en casa', 'Я дома'], ['Hasta mañana', 'До завтра']]),
-      ],
-    },
   },
 ];
