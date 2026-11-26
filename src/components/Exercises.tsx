@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Exercise } from '../types';
 import { normalize, shuffle } from '../engine/generate';
 import { speak } from '../engine/tts';
+import { ALL_ITEMS, COURSE } from '../content/course-es';
 
 export interface ExProps<T extends Exercise = Exercise> {
   ex: T;
@@ -159,6 +160,17 @@ export function Card({ ex, onNext }: { ex: Extract<Exercise, { kind: 'card' }>; 
   );
 }
 
+// Перевод варианта ответа: для испанского — русский, для русского — исходная испанская фраза.
+// В сохранённом уроке лежат только строки вариантов, поэтому фразу ищем в курсе,
+// начиная с урока самой загаданной фразы (у одинаковых переводов он точнее).
+function translationOf(option: string, ex: Extract<Exercise, { kind: 'choose' }>): string | undefined {
+  const [from, to] = ex.dir === 'es-ru' ? (['ru', 'es'] as const) : (['es', 'ru'] as const);
+  if (option === ex.answer) return ex.item[to];
+  const lesson = COURSE.find((l) => l.items.some((i) => i.id === ex.item.id));
+  const match = lesson?.items.find((i) => i[from] === option) ?? ALL_ITEMS.find((i) => i[from] === option);
+  return match?.[to];
+}
+
 export function Choose({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kind: 'choose' }>>) {
   const [picked, setPicked] = useState<string | null>(null);
   useEffect(() => {
@@ -173,6 +185,9 @@ export function Choose({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kin
     onAnswer(o === ex.answer, ex.answer);
   };
   useNumberKeys(ex.options.length, (i) => pick(ex.options[i]), locked);
+
+  // После верного ответа подписываем перевод каждого варианта.
+  const solved = picked === ex.answer;
 
   const label =
     ex.dir === 'es-ru' ? 'Выберите перевод' : ex.dir === 'ru-es' ? 'Как это по-испански?' : 'Что вы услышали?';
@@ -200,6 +215,7 @@ export function Choose({ ex, locked, onAnswer }: ExProps<Extract<Exercise, { kin
           return (
             <button key={o} className={cls} disabled={locked} onClick={() => pick(o)}>
               {o}
+              {solved && <span className="opt-sub">{translationOf(o, ex)}</span>}
               <OptKey n={i + 1} />
             </button>
           );
