@@ -115,7 +115,7 @@ const full: Lesson[] = [
     goal: 'Заказать напиток, попросить счёт и спросить цену',
     tip: {
       title: 'Quiero — вежливая просьба',
-      text: '«Quiero» — «я хочу». Для вежливости добавляйте «por favor». Артикль не нужен, когда вы заказываете: «Un café, por favor», «Con leche».',
+      text: '«Quiero» — «я хочу». Для вежливости добавляйте «por favor». Одну порцию заказывают с un или una: «Un café, por favor».',
     },
     items: items('d05', [
       ['Un café, por favor', 'Кофе, пожалуйста'],
